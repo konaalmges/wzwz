@@ -6,6 +6,25 @@ let strengthModifier = 0;
 let timerRunning = false;
 
 function nextStep(step){
+
+  // 🔒 منع الانتقال من خطوة الماء بدون إدخال صحيح
+  if(currentStep === 2){
+    const water = parseFloat(document.getElementById("water").value);
+    if(!water || water <= 0){
+      alert("أدخل كمية ماء صحيحة أولاً ☕");
+      return;
+    }
+  }
+
+  // 🔒 منع الانتقال من خطوة القوة بدون حساب
+  if(currentStep === 3){
+    const water = parseFloat(document.getElementById("water").value);
+    if(!water || water <= 0){
+      alert("لا يمكن بدء الخدرة بدون ماء ☕");
+      return;
+    }
+  }
+
   document.getElementById("step"+currentStep).classList.remove("active");
   currentStep = step;
   document.getElementById("step"+currentStep).classList.add("active");
@@ -61,7 +80,7 @@ function startTimer(){
 
     if(remaining<=0){
       clearInterval(interval);
-      display.textContent="جاهز ☕";
+      display.textContent="بالعافيهه يابطل ☕";
       if(navigator.vibrate) navigator.vibrate(500);
       timerRunning=false;
     }
@@ -73,3 +92,4 @@ function scrollToCalc(){
   .scrollIntoView({behavior:"smooth"});
 
 }
+
