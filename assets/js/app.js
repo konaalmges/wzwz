@@ -1,61 +1,41 @@
-let currentSlide = 0;
-let selectedTea = null;
+let selectedRatio = 0;
 let teaStrength = 0;
 let sugarStrength = 0;
-
-const teas = [
-{name:"الحوت",ratio:18},
-{name:"ربيع",ratio:20},
-{name:"المنيس",ratio:22},
-{name:"أبو جبل",ratio:24},
-{name:"سيلاني",ratio:26}
-];
-
-const slider = document.getElementById("slider");
-const progress = document.getElementById("progressBar");
+let teaGrams = 0;
+let sugarGrams = 0;
 
 function scrollToCalc(){
 document.getElementById("calculator")
 .scrollIntoView({behavior:"smooth"});
 }
 
-function renderTeas(){
-const container=document.getElementById("teaContainer");
-teas.forEach(t=>{
-let div=document.createElement("div");
-div.className="tea-card";
-div.innerText=t.name;
-div.onclick=()=>{
-document.querySelectorAll(".tea-card")
-.forEach(c=>c.classList.remove("active"));
-div.classList.add("active");
-selectedTea=t;
-};
-container.appendChild(div);
-});
-}
+function nextStep(step){
 
-function nextSlide(){
-if(currentSlide===0 && !selectedTea){
+if(step===2 && selectedRatio===0){
 alert("اختر الشاهي أولاً");
 return;
 }
-if(currentSlide===1){
+
+if(step===3){
 let water=document.getElementById("water").value;
 if(!water){alert("أدخل كمية الماء");return;}
 }
-currentSlide++;
-updateSlider();
+
+document.querySelectorAll(".step")
+.forEach(s=>s.classList.remove("active"));
+
+document.getElementById("step"+step)
+.classList.add("active");
+
+calculate();
 }
 
-function prevSlide(){
-currentSlide--;
-updateSlider();
-}
+function selectTea(card){
+document.querySelectorAll(".tea-card")
+.forEach(c=>c.classList.remove("active"));
 
-function updateSlider(){
-slider.style.transform=`translateX(-${currentSlide*100}%)`;
-progress.style.width=((currentSlide+1)/4)*100+"%";
+card.classList.add("active");
+selectedRatio=parseInt(card.dataset.ratio);
 calculate();
 }
 
@@ -76,16 +56,16 @@ calculate();
 }
 
 function calculate(){
-if(!selectedTea)return;
 let water=parseInt(document.getElementById("water").value)||0;
-let tea=((water/1000)*selectedTea.ratio)+teaStrength;
-let sugar=((water/1000)*30)+sugarStrength;
+if(!selectedRatio||!water)return;
+
+teaGrams=((water/1000)*selectedRatio)+teaStrength;
+sugarGrams=((water/1000)*30)+sugarStrength;
+
 document.getElementById("result").innerText=
-`${tea.toFixed(1)}غ شاهي + ${sugar.toFixed(1)}غ سكر`;
+`${teaGrams.toFixed(1)} غ شاهي + ${sugarGrams.toFixed(1)} غ سكر`;
 }
 
 function startTimer(){
 alert("جاهز ☕");
 }
-
-renderTeas();
