@@ -1,126 +1,29 @@
-/* إعدادات عامة */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Tahoma", sans-serif;
+.tea-types{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:15px;
+  margin:30px 0;
 }
 
-body {
-    background: linear-gradient(135deg, #f5e6d3, #e6d2b5);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.tea-card{
+  background:white;
+  border:2px solid #eee;
+  padding:20px 15px;
+  border-radius:16px;
+  cursor:pointer;
+  transition:.3s;
+  box-shadow:0 10px 25px rgba(0,0,0,.05);
 }
 
-/* الهيدر */
-.header {
-    text-align: center;
-    padding: 40px 20px 20px;
+.tea-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--gold);
+  box-shadow:0 15px 35px rgba(198,162,93,.25);
 }
 
-.logo {
-    width: 170px;
-    max-width: 90%;
-}
-
-.tagline {
-    margin-top: 10px;
-    color: #6b4f3a;
-    font-size: 14px;
-}
-
-/* الكرت */
-.card {
-    background: #fffaf3;
-    width: 95%;
-    max-width: 420px;
-    padding: 30px 25px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    margin-bottom: 40px;
-}
-.custom-alert {
-    background: #fff3cd;
-    color: #664d03;
-    border: 1px solid #ffecb5;
-    padding: 12222px;
-    border-radius: 12px;
-    margin-top: 15px;
-    text-align: center;
-    display: none;
-    font-size: 14px;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-/* الأقسام */
-.section {
-    margin-bottom: 20px;
-}
-
-.section label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #5a3f2a;
-}
-
-/* المدخلات */
-select,
-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid #d6c1a6;
-    background: #fff;
-    font-size: 14px;
-    outline: none;
-    transition: 0.2s;
-}
-
-select:focus,
-input:focus {
-    border-color: #a6784f;
-}
-
-/* النتيجة */
-.result-box {
-    background: #f3e4cf;
-    padding: 15px;
-    border-radius: 15px;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.result-box p {
-    color: #6b4f3a;
-    font-size: 14px;
-}
-
-.result-box h2 {
-    margin-top: 5px;
-    color: #4b2f1c;
-    font-size: 22px;
-}
-
-/* الزر */
-button {
-    width: 100%;
-    padding: 14px;
-    background: #8b5e34;
-    color: white;
-    border: none;
-    border-radius: 14px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button:hover {
-    background: #6e4726;
+.active-tea{
+  border-color:var(--gold);
+  background:linear-gradient(145deg,#fff,#fff6e8);
+  box-shadow:0 0 25px rgba(198,162,93,.4);
+  transform:scale(1.03);
 }
