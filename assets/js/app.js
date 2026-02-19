@@ -132,7 +132,7 @@ function startTimer(){
 
   nextStep(5);
 
-  let total = 22 * 60;
+  let total = 2 * 60;
   let fill = document.getElementById("teaFill");
 
   timer = setInterval(() => {
@@ -143,7 +143,7 @@ function startTimer(){
     document.getElementById("timeDisplay").innerText =
       `${m}:${s < 10 ? "0" : ""}${s}`;
 
-    let percent = ((22*60 - total) / (22*60)) * 100;
+    let percent = ((2*60 - total) / (2*60)) * 100;
     fill.style.height = percent + "%";
 
     total--;
