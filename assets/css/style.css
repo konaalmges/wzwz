@@ -1,114 +1,126 @@
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI}
-
-:root{--gold:#c6a25d;--light:#f9f9f9}
-
-body{background:var(--light);padding-top:80px}
-
-/* NAV */
-.navbar{
-position:fixed;
-top:0;
-width:100%;
-background:#fff;
-padding:15px 40px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 4px 15px rgba(0,0,0,.05);
+/* إعدادات عامة */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Tahoma", sans-serif;
 }
 
-.logo{font-weight:bold;color:var(--gold)}
-.logo-img{width:40px;height:40px;border-radius:8px}
-.nav-links{display:flex;gap:20px;list-style:none}
-.nav-links a{text-decoration:none;color:#333;font-weight:600}
-
-/* HERO */
-.hero{
-height:100vh;
-background:#111;
-color:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-}
-.hero button{
-margin-top:20px;
-padding:10px 20px;
-background:var(--gold);
-border:none;
-color:#fff;
-border-radius:8px;
+body {
+    background: linear-gradient(135deg, #f5e6d3, #e6d2b5);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* CALC */
-.calculator{
-padding:80px 20px;
-display:flex;
-justify-content:center;
-}
-.calc-card{
-background:#fff;
-padding:30px;
-border-radius:20px;
-max-width:500px;
-width:100%;
-box-shadow:0 15px 40px rgba(0,0,0,.08);
+/* الهيدر */
+.header {
+    text-align: center;
+    padding: 40px 20px 20px;
 }
 
-.step{display:none}
-.step.active{display:block}
-
-.tea-types{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-margin:20px 0;
-}
-.tea-card{
-padding:15px;
-border:2px solid #eee;
-border-radius:12px;
-cursor:pointer;
-text-align:center;
-}
-.tea-card.active{
-border-color:var(--gold);
-background:#fff6e8;
+.logo {
+    width: 170px;
+    max-width: 90%;
 }
 
-.strength{
-display:flex;
-gap:10px;
-justify-content:center;
-margin:20px 0;
-flex-wrap:wrap;
-}
-.strength button{
-padding:8px 15px;
-border:none;
-border-radius:8px;
-background:#eee;
-cursor:pointer;
-}
-.strength .active{
-background:var(--gold);
-color:#fff;
+.tagline {
+    margin-top: 10px;
+    color: #6b4f3a;
+    font-size: 14px;
 }
 
-button{
-padding:10px 15px;
-border:none;
-border-radius:8px;
-background:var(--gold);
-color:#fff;
-cursor:pointer;
+/* الكرت */
+.card {
+    background: #fffaf3;
+    width: 95%;
+    max-width: 420px;
+    padding: 30px 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    margin-bottom: 40px;
+}
+.custom-alert {
+    background: #fff3cd;
+    color: #664d03;
+    border: 1px solid #ffecb5;
+    padding: 12222px;
+    border-radius: 12px;
+    margin-top: 15px;
+    text-align: center;
+    display: none;
+    font-size: 14px;
+    animation: fadeIn 0.3s ease;
 }
 
-footer{
-text-align:center;
-padding:30px;
-background:#111;
-color:#fff;
-margin-top:60px;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* الأقسام */
+.section {
+    margin-bottom: 20px;
+}
+
+.section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #5a3f2a;
+}
+
+/* المدخلات */
+select,
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #d6c1a6;
+    background: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+
+select:focus,
+input:focus {
+    border-color: #a6784f;
+}
+
+/* النتيجة */
+.result-box {
+    background: #f3e4cf;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.result-box p {
+    color: #6b4f3a;
+    font-size: 14px;
+}
+
+.result-box h2 {
+    margin-top: 5px;
+    color: #4b2f1c;
+    font-size: 22px;
+}
+
+/* الزر */
+button {
+    width: 100%;
+    padding: 14px;
+    background: #8b5e34;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #6e4726;
 }
