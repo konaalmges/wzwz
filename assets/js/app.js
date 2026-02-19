@@ -16,7 +16,6 @@ function revealOnScroll(){
     }
   });
 }
-
 window.addEventListener("scroll", revealOnScroll);
 revealOnScroll();
 
@@ -24,19 +23,30 @@ revealOnScroll();
 let currentStep = 1;
 let strengthModifier = 0;
 let timerRunning = false;
+let selectedRatio = null;
+
+/* ================= TEA SELECTION ================= */
+function selectTea(card){
+
+  document.querySelectorAll(".tea-card")
+    .forEach(c=>c.classList.remove("active-tea"));
+
+  card.classList.add("active-tea");
+
+  selectedRatio = parseFloat(card.dataset.ratio);
+}
 
 /* ================= STEP CONTROL ================= */
 function nextStep(step){
 
-  // منع الانتقال من اختيار النوع بدون اختيار
+  // منع الانتقال بدون اختيار نوع
   if(currentStep === 1){
-    const teaType = document.getElementById("teaType").value;
-    if(!teaType){
+    if(!selectedRatio){
       return;
     }
   }
 
-  // منع الانتقال من خطوة الماء بدون إدخال صحيح
+  // منع الانتقال بدون ماء صحيح
   if(currentStep === 2){
     const water = parseFloat(document.getElementById("water").value);
     if(!water || water <= 0){
@@ -70,16 +80,16 @@ function setStrength(mod,btn){
 
 /* ================= CALCULATE ================= */
 function calculate(){
-  const teaRatio = parseFloat(document.getElementById("teaType").value);
+
   const water = parseFloat(document.getElementById("water").value);
 
-  if(!water || water <= 0){
+  if(!selectedRatio || !water || water <= 0){
     document.getElementById("result").innerText =
       "النتيجة: 0 غرام";
     return;
   }
 
-  let baseWeight = (water/1000) * teaRatio;
+  let baseWeight = (water/1000) * selectedRatio;
   let finalWeight = baseWeight + strengthModifier;
 
   document.getElementById("result").innerText =
@@ -94,16 +104,16 @@ function startTimer(){
 
   const water = parseFloat(document.getElementById("water").value);
 
-  // حماية نهائية
-  if(!water || water <= 0) return;
-
+  if(!selectedRatio || !water || water <= 0) return;
   if(timerRunning) return;
+
   timerRunning = true;
 
   nextStep(4);
 
   let total = 22 * 60;
   let remaining = total;
+
   const display = document.getElementById("timeDisplay");
   const fill = document.getElementById("teaFill");
 
@@ -124,7 +134,6 @@ function startTimer(){
     let progress = ((total-remaining)/total)*100;
     fill.style.height = progress+"%";
 
-    // نبض خفيف آخر 10 ثواني
     if(remaining <= 10){
       display.style.color = "#e8c98a";
       display.style.transform = "scale(1.05)";
