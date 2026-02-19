@@ -1,135 +1,177 @@
-/* ===================================
-   WAZNAH - Professional Script
-=================================== */
 
-let selectedTeaRatio = 20;
+
+let selectedRatio = 0;
+
+/* الشاهي */
 let teaStrength = 0;
-let sugarStrength = 0;
-let baseTea = 0;
-let baseSugar = 0;
-let timerInterval = null;
-let totalSeconds = 22 * 60;
+let teaGrams = 0;
 
-/* ===================================
-   HERO BUTTON SCROLL
-=================================== */
+/* السكر */
+let sugarStrength = 0;
+let sugarGrams = 0;
+
+let timer = null;
+
+/* 👇 غير وقت الخدرة من هنا فقط */
+let khadraTime = 1; // بالدقائق
+
+/* =========================
+   تنقل
+========================= */
 
 function scrollToCalc(){
   document.getElementById("calculator")
-    .scrollIntoView({ behavior: "smooth" });
+  .scrollIntoView({behavior:"smooth"});
 }
 
-/* ===================================
-   STEP NAVIGATION
-=================================== */
+function nextStep(step){
 
-function nextStep(stepNumber){
-  document.querySelectorAll(".step").forEach(step=>{
-    step.classList.remove("active");
-  });
+  if(step === 2 && selectedRatio === 0){
+    alert("اختر نوع الشاهي أولاً");
+    return;
+  }
 
-  document.getElementById("step"+stepNumber)
-    .classList.add("active");
+  if(step === 3){
+    let water = parseInt(document.getElementById("water").value);
+    if(!water || water <= 0){
+      alert("أدخل كمية ماء صحيحة");
+      return;
+    }
+  }
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  document.querySelectorAll(".step")
+  .forEach(s => s.classList.remove("active"));
+
+  document.getElementById("step" + step)
+  .classList.add("active");
+
+  calculate();
 }
 
-/* ===================================
-   SELECT TEA TYPE
-=================================== */
+/* =========================
+   اختيار نوع
+========================= */
 
-function selectTea(element){
+function selectTea(card){
   document.querySelectorAll(".tea-card")
-    .forEach(card => card.classList.remove("active-tea"));
+  .forEach(c => c.classList.remove("active-tea"));
 
-  element.classList.add("active-tea");
+  card.classList.add("active-tea");
+  selectedRatio = parseInt(card.dataset.ratio);
 
-  selectedTeaRatio = parseInt(element.dataset.ratio);
+  calculate();
 }
 
-/* ===================================
-   STRENGTH SELECTION
-=================================== */
+/* =========================
+   وزن الشاهي
+========================= */
 
 function setTeaStrength(value, btn){
   teaStrength = value;
 
   document.querySelectorAll("#teaStrength button")
-    .forEach(b=>b.classList.remove("active-strength"));
+  .forEach(b => b.classList.remove("active-strength"));
 
   btn.classList.add("active-strength");
 
-  calculateResult();
+  calculate();
 }
+
+/* =========================
+   وزن السكر
+========================= */
 
 function setSugarStrength(value, btn){
   sugarStrength = value;
 
   document.querySelectorAll("#sugarStrength button")
-    .forEach(b=>b.classList.remove("active-strength"));
+  .forEach(b => b.classList.remove("active-strength"));
 
   btn.classList.add("active-strength");
 
-  calculateResult();
+  calculate();
 }
 
-/* ===================================
-   CALCULATION
-=================================== */
+/* =========================
+   الحساب
+========================= */
 
-function calculateResult(){
+function calculate(){
 
-  const water = parseInt(document.getElementById("water").value);
+  let water = parseInt(document.getElementById("water").value);
+  if(!water || !selectedRatio) return;
 
-  if(!water || water <= 0){
-    return;
-  }
+  teaGrams = ((water / 1000) * selectedRatio) + teaStrength;
+  sugarGrams = ((water / 1000) * 30) + sugarStrength;
 
-  baseTea = (water / 1000) * selectedTeaRatio;
-  baseSugar = (water / 1000) * 40;
-
-  let finalTea = Math.max(0, baseTea + teaStrength);
-  let finalSugar = Math.max(0, baseSugar + sugarStrength);
+  if(teaGrams < 0) teaGrams = 0;
+  if(sugarGrams < 0) sugarGrams = 0;
 
   document.getElementById("result").innerText =
-    `النتيجة: ${finalTea.toFixed(1)} غرام شاهي + ${finalSugar.toFixed(1)} غرام سكر`;
+    `النتيجة: ${teaGrams.toFixed(1)} غرام شاهي + ${sugarGrams.toFixed(1)} غرام سكر`;
 }
 
-/* ===================================
-   TIMER
-=================================== */
+/* =========================
+   المؤقت
+========================= */
 
 function startTimer(){
 
+  if(teaGrams <= 0){
+    alert("احسب الكمية أولاً");
+    return;
+  }
+
+  if(timer){
+    clearInterval(timer);
+    timer = null;
+  }
+
   nextStep(5);
 
-  let seconds = totalSeconds;
+  let total = khadraTime * 60;
+  let fullTime = khadraTime * 60;
+  let fill = document.getElementById("teaFill");
 
-  timerInterval = setInterval(()=>{
+  timer = setInterval(() => {
 
-    let minutes = Math.floor(seconds / 60);
-    let remainingSeconds = seconds % 60;
+    let m = Math.floor(total / 60);
+    let s = total % 60;
 
     document.getElementById("timeDisplay").innerText =
-      `${String(minutes).padStart(2,'0')}:${String(remainingSeconds).padStart(2,'0')}`;
+      `${m}:${s < 10 ? "0" : ""}${s}`;
 
-    let progress = ((totalSeconds - seconds) / totalSeconds) * 100;
-    document.getElementById("teaFill").style.height = progress + "%";
+    let percent = ((fullTime - total) / fullTime) * 100;
+    fill.style.height = percent + "%";
 
-    if(seconds <= 0){
-      clearInterval(timerInterval);
+    total--;
+
+    if(total < 0){
+      clearInterval(timer);
+      timer = null;
       document.getElementById("timeDisplay").innerText = "جاهز ☕";
     }
 
-    seconds--;
-
   },1000);
-  window.addEventListener("scroll",()=>{
-  const navbar = document.querySelector(".navbar");
-  if(window.scrollY > 50){
-    navbar.classList.add("scrolled");
-  }else{
-    navbar.classList.remove("scrolled");
-  }
-});
 }
+
+/* =========================
+   التهيئة
+========================= */
+
+window.addEventListener("DOMContentLoaded",()=>{
+
+  let defaultTea = document.querySelector(".default-tea");
+  if(defaultTea){
+    defaultTea.classList.add("active-strength");
+  }
+
+  let defaultSugar = document.querySelector(".default-sugar");
+  if(defaultSugar){
+    defaultSugar.classList.add("active-strength");
+  }
+
+  document.getElementById("water")
+  .addEventListener("input",calculate);
+
+});
