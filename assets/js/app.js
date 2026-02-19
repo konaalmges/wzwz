@@ -1,152 +1,127 @@
-/* ================================
-   WZWZ TEA APP
-   Clean Professional Version
-================================ */
+/* ===================================
+   WAZNAH - Professional Script
+=================================== */
 
-let state = {
-  company: null,
-  strength: 0,
-  quickMode: false
-};
+let selectedTeaRatio = 20;
+let teaStrength = 0;
+let sugarStrength = 0;
+let baseTea = 0;
+let baseSugar = 0;
+let timerInterval = null;
+let totalSeconds = 22 * 60;
 
-const companies = {
-  rabea: { name: "ربيع", baseTime: 22 },
-  kabous: { name: "كبوس", baseTime: 23 },
-  lipton: { name: "ليبتون", baseTime: 21 },
-  alghazalain: { name: "الغزالين", baseTime: 24 },
-  safa: { name: "صفا", baseTime: 22 },
-  harith: { name: "الحارث", baseTime: 23 }
-};
+/* ===================================
+   HERO BUTTON SCROLL
+=================================== */
 
-/* ================================
+function scrollToCalc(){
+  document.getElementById("calculator")
+    .scrollIntoView({ behavior: "smooth" });
+}
+
+/* ===================================
    STEP NAVIGATION
-================================ */
+=================================== */
 
-function nextStep(stepId){
+function nextStep(stepNumber){
   document.querySelectorAll(".step").forEach(step=>{
     step.classList.remove("active");
   });
 
-  document.getElementById(stepId).classList.add("active");
-  window.scrollTo({top:0, behavior:"smooth"});
+  document.getElementById("step"+stepNumber)
+    .classList.add("active");
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* ================================
-   SELECT COMPANY
-================================ */
+/* ===================================
+   SELECT TEA TYPE
+=================================== */
 
-function selectCompany(key, btn){
-  state.company = key;
+function selectTea(element){
+  document.querySelectorAll(".tea-card")
+    .forEach(card => card.classList.remove("active-tea"));
 
-  document.querySelectorAll(".company-card").forEach(card=>{
-    card.classList.remove("active-card");
-  });
+  element.classList.add("active-tea");
 
-  btn.classList.add("active-card");
-
-  nextStep("step2");
-  saveState();
+  selectedTeaRatio = parseInt(element.dataset.ratio);
 }
 
-/* ================================
-   SET STRENGTH
-================================ */
+/* ===================================
+   STRENGTH SELECTION
+=================================== */
 
 function setTeaStrength(value, btn){
-  state.strength = value;
+  teaStrength = value;
 
-  document.querySelectorAll("#teaStrength button").forEach(b=>{
-    b.classList.remove("active-strength");
-  });
+  document.querySelectorAll("#teaStrength button")
+    .forEach(b=>b.classList.remove("active-strength"));
 
   btn.classList.add("active-strength");
 
-  nextStep("step3");
-  saveState();
+  calculateResult();
 }
 
-/* ================================
-   QUICK MODE
-================================ */
+function setSugarStrength(value, btn){
+  sugarStrength = value;
 
-function toggleQuickMode(){
-  state.quickMode = !state.quickMode;
+  document.querySelectorAll("#sugarStrength button")
+    .forEach(b=>b.classList.remove("active-strength"));
 
-  const btn = document.getElementById("quickBtn");
+  btn.classList.add("active-strength");
 
-  if(state.quickMode){
-    btn.classList.add("active-quick");
-  } else {
-    btn.classList.remove("active-quick");
-  }
-
-  saveState();
+  calculateResult();
 }
 
-/* ================================
-   CALCULATE RESULT
-================================ */
+/* ===================================
+   CALCULATION
+=================================== */
 
-function calculateTea(){
+function calculateResult(){
 
-  if(!state.company){
-    alert("اختر نوع الشاهي أولاً");
+  const water = parseInt(document.getElementById("water").value);
+
+  if(!water || water <= 0){
     return;
   }
 
-  let baseTime = companies[state.company].baseTime;
+  baseTea = (water / 1000) * selectedTeaRatio;
+  baseSugar = (water / 1000) * 40;
 
-  let finalTime = baseTime + state.strength;
+  let finalTea = Math.max(0, baseTea + teaStrength);
+  let finalSugar = Math.max(0, baseSugar + sugarStrength);
 
-  if(state.quickMode){
-    finalTime -= 3;
-  }
-
-  if(finalTime < 15){
-    finalTime = 15;
-  }
-
-  const resultBox = document.getElementById("resultBox");
-
-  resultBox.innerHTML = `
-    <h3>النتيجة</h3>
-    <p>شركة: ${companies[state.company].name}</p>
-    <p>مدة الغلي: ${finalTime} دقيقة</p>
-    ${state.quickMode ? "<p>وضع سريع مفعل ⚡</p>" : ""}
-  `;
-
-  nextStep("step4");
+  document.getElementById("result").innerText =
+    `النتيجة: ${finalTea.toFixed(1)} غرام شاهي + ${finalSugar.toFixed(1)} غرام سكر`;
 }
 
-/* ================================
-   RESET
-================================ */
+/* ===================================
+   TIMER
+=================================== */
 
-function resetAll(){
-  state = {
-    company: null,
-    strength: 0,
-    quickMode: false
-  };
+function startTimer(){
 
-  localStorage.removeItem("teaState");
-  location.reload();
+  nextStep(5);
+
+  let seconds = totalSeconds;
+
+  timerInterval = setInterval(()=>{
+
+    let minutes = Math.floor(seconds / 60);
+    let remainingSeconds = seconds % 60;
+
+    document.getElementById("timeDisplay").innerText =
+      `${String(minutes).padStart(2,'0')}:${String(remainingSeconds).padStart(2,'0')}`;
+
+    let progress = ((totalSeconds - seconds) / totalSeconds) * 100;
+    document.getElementById("teaFill").style.height = progress + "%";
+
+    if(seconds <= 0){
+      clearInterval(timerInterval);
+      document.getElementById("timeDisplay").innerText = "جاهز ☕";
+    }
+
+    seconds--;
+
+  },1000);
 }
-
-/* ================================
-   SAVE / LOAD
-================================ */
-
-function saveState(){
-  localStorage.setItem("teaState", JSON.stringify(state));
-}
-
-function loadState(){
-  const saved = localStorage.getItem("teaState");
-
-  if(saved){
-    state = JSON.parse(saved);
-  }
-}
-
-loadState();
