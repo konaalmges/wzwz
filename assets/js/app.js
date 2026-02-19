@@ -1,179 +1,193 @@
-/* =========================
-   WAZNAH FULL VERSION
-========================= */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
 
-let selectedRatio = 0;
-
-/* الشاهي */
-let teaStrength = 0;
-let teaGrams = 0;
-
-/* السكر */
-let sugarStrength = 0;
-let sugarGrams = 0;
-
-let timer = null;
-
-/* 👇 غير وقت الخدرة من هنا فقط */
-let khadraTime = 1; // بالدقائق
-
-/* =========================
-   تنقل
-========================= */
-
-function scrollToCalc(){
-  document.getElementById("calculator")
-  .scrollIntoView({behavior:"smooth"});
+:root{
+  --gold:#c6a25d;
+  --dark:#111;
+  --light:#f8f8f8;
 }
 
-function nextStep(step){
-
-  if(step === 2 && selectedRatio === 0){
-    alert("اختر نوع الشاهي أولاً");
-    return;
-  }
-
-  if(step === 3){
-    let water = parseInt(document.getElementById("water").value);
-    if(!water || water <= 0){
-      alert("أدخل كمية ماء صحيحة");
-      return;
-    }
-  }
-
-  document.querySelectorAll(".step")
-  .forEach(s => s.classList.remove("active"));
-
-  document.getElementById("step" + step)
-  .classList.add("active");
-
-  calculate();
+body{
+  background:var(--light);
+  color:#333;
+  scroll-behavior:smooth;
 }
 
-/* =========================
-   اختيار نوع
-========================= */
-
-function selectTea(card){
-  document.querySelectorAll(".tea-card")
-  .forEach(c => c.classList.remove("active-tea"));
-
-  card.classList.add("active-tea");
-  selectedRatio = parseInt(card.dataset.ratio);
-
-  calculate();
+/* NAVBAR */
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:15px 30px;
+  background:white;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 5px 15px rgba(0,0,0,.05);
+  z-index:1000;
 }
 
-/* =========================
-   وزن الشاهي
-========================= */
+.logo{font-size:22px;font-weight:bold;color:var(--gold);}
+.logo-img{width:45px;height:45px;border-radius:8px;object-fit:cover;}
 
-function setTeaStrength(value, btn){
-  teaStrength = value;
+.nav-links{list-style:none;display:flex;gap:20px;}
+.nav-links a{text-decoration:none;color:#333;font-weight:600;}
 
-  document.querySelectorAll("#teaStrength button")
-  .forEach(b => b.classList.remove("active-strength"));
-
-  btn.classList.add("active-strength");
-
-  calculate();
+/* HERO */
+.hero{
+  height:100vh;
+  background:
+    linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.65)),
+    url('../images/hero.jpg');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  text-align:center;
+  padding:20px;
 }
 
-/* =========================
-   وزن السكر
-========================= */
+.hero-content h1{font-size:32px;margin-bottom:15px;}
+.hero-content p{opacity:.9;margin-bottom:25px;}
 
-function setSugarStrength(value, btn){
-  sugarStrength = value;
-
-  document.querySelectorAll("#sugarStrength button")
-  .forEach(b => b.classList.remove("active-strength"));
-
-  btn.classList.add("active-strength");
-
-  calculate();
+.primary-btn{
+  padding:14px 32px;
+  border:none;
+  background:var(--gold);
+  color:white;
+  font-size:16px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:.3s;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
 }
 
-/* =========================
-   الحساب
-========================= */
+.primary-btn:hover{transform:translateY(-3px);}
 
-function calculate(){
-
-  let water = parseInt(document.getElementById("water").value);
-  if(!water || !selectedRatio) return;
-
-  teaGrams = ((water / 1000) * selectedRatio) + teaStrength;
-  sugarGrams = ((water / 1000) * 30) + sugarStrength;
-
-  if(teaGrams < 0) teaGrams = 0;
-  if(sugarGrams < 0) sugarGrams = 0;
-
-  document.getElementById("result").innerText =
-    `النتيجة: ${teaGrams.toFixed(1)} غرام شاهي + ${sugarGrams.toFixed(1)} غرام سكر`;
+/* FEATURES */
+.features{
+  padding:120px 20px 80px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
 }
 
-/* =========================
-   المؤقت
-========================= */
-
-function startTimer(){
-
-  if(teaGrams <= 0){
-    alert("احسب الكمية أولاً");
-    return;
-  }
-
-  if(timer){
-    clearInterval(timer);
-    timer = null;
-  }
-
-  nextStep(5);
-
-  let total = khadraTime * 60;
-  let fullTime = khadraTime * 60;
-  let fill = document.getElementById("teaFill");
-
-  timer = setInterval(() => {
-
-    let m = Math.floor(total / 60);
-    let s = total % 60;
-
-    document.getElementById("timeDisplay").innerText =
-      `${m}:${s < 10 ? "0" : ""}${s}`;
-
-    let percent = ((fullTime - total) / fullTime) * 100;
-    fill.style.height = percent + "%";
-
-    total--;
-
-    if(total < 0){
-      clearInterval(timer);
-      timer = null;
-      document.getElementById("timeDisplay").innerText = "جاهز ☕";
-    }
-
-  },1000);
+.card{
+  background:white;
+  padding:30px;
+  border-radius:15px;
+  width:250px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.05);
+  transition:.3s;
 }
 
-/* =========================
-   التهيئة
-========================= */
+.card:hover{transform:translateY(-5px);}
 
-window.addEventListener("DOMContentLoaded",()=>{
+/* CALCULATOR */
+.calculator{
+  padding:120px 20px;
+  display:flex;
+  justify-content:center;
+}
 
-  let defaultTea = document.querySelector(".default-tea");
-  if(defaultTea){
-    defaultTea.classList.add("active-strength");
-  }
+.calc-card{
+  background:white;
+  padding:40px;
+  border-radius:20px;
+  width:100%;
+  max-width:500px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
 
-  let defaultSugar = document.querySelector(".default-sugar");
-  if(defaultSugar){
-    defaultSugar.classList.add("active-strength");
-  }
+.step{display:none;}
+.step.active{display:block;}
 
-  document.getElementById("water")
-  .addEventListener("input",calculate);
+input{
+  width:100%;
+  padding:12px;
+  margin:20px 0;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:15px;
+}
 
-});
+.tea-types{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:15px;
+  margin:20px 0;
+}
+
+.tea-card{
+  padding:20px;
+  border:2px solid #eee;
+  border-radius:12px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.tea-card:hover{border-color:var(--gold);}
+.active-tea{
+  border-color:var(--gold);
+  background:#fff6e8;
+}
+
+.strength{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin:20px 0;
+  flex-wrap:wrap;
+}
+
+.strength button{
+  background:#eee;
+  color:#333;
+  border-radius:30px;
+  padding:10px 18px;
+  font-weight:600;
+  transition:.2s;
+}
+
+.active-strength{
+  background:var(--gold)!important;
+  color:white!important;
+}
+
+/* TIMER */
+.cup{
+  width:120px;
+  height:150px;
+  border:4px solid #333;
+  border-radius:0 0 40px 40px;
+  margin:0 auto 20px;
+  position:relative;
+  overflow:hidden;
+}
+
+.tea-fill{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:0%;
+  background:#6b3e26;
+  transition:height 1s linear;
+}
+
+#timeDisplay{
+  font-size:22px;
+  font-weight:bold;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:30px;
+  background:#111;
+  color:white;
+}
