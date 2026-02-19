@@ -4,14 +4,18 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>WAZNAH</title>
+
 <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 
 <body>
 
-<nav class="navbar">
-  <div class="logo">وزنة</div>
-  <ul>
+<nav class="navbar" id="navbar">
+  <div class="logo">
+    <img src="tea.jpg" alt="WAZNAH Logo">
+  </div>
+
+  <ul class="nav-links">
     <li><a href="#hero">الرئيسية</a></li>
     <li><a href="#features">المميزات</a></li>
     <li><a href="#calculator">احسب</a></li>
@@ -46,13 +50,13 @@
 <option value="15">أبو جبل</option>
 <option value="13">سيلاني</option>
 </select>
-<button onclick="nextStep(2)">التالي</button>
+<button class="lux-btn" onclick="nextStep(2)">التالي</button>
 </div>
 
 <div id="step2" class="step">
 <h2>كمية الماء (مل)</h2>
 <input type="number" id="water" placeholder="مثال 1500" />
-<button onclick="nextStep(3)">التالي</button>
+<button class="lux-btn" onclick="nextStep(3)">التالي</button>
 </div>
 
 <div id="step3" class="step">
@@ -71,6 +75,7 @@
 <h2>جارٍ الخدرة...</h2>
 
 <div class="cup-container">
+<div class="steam"></div>
 <div class="cup">
 <div class="tea-fill" id="teaFill"></div>
 </div>
@@ -83,7 +88,7 @@
 </section>
 
 <footer>
-WAZNAH © 2026 — دقة في كل كاسة.
+WAZNAH ©️ 2026 — دقة في كل كاسة.
 </footer>
 
 <script src="assets/js/app.js"></script>
