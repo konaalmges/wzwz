@@ -131,8 +131,8 @@ function startTimer(){
   }
 
   nextStep(5);
-
-  let total = 22 * 60;
+let khadraTime = 22; // غير الرقم هنا متى ما تبي
+let total = khadraTime * 60;
   let fill = document.getElementById("teaFill");
 
   timer = setInterval(() => {
