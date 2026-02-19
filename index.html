@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WAZNAH</title>
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="logo">وزنة</div>
+  <ul>
+    <li><a href="#hero">الرئيسية</a></li>
+    <li><a href="#features">المميزات</a></li>
+    <li><a href="#calculator">احسب</a></li>
+  </ul>
+</nav>
+
+<section id="hero" class="hero">
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <h1>اتقن شاهيك بميزان احترافي</h1>
+    <p>دقة… انتظار… تجربة تستحق.</p>
+    <button class="primary-btn" onclick="scrollToCalc()">ابدأ التجربة ☕</button>
+  </div>
+</section>
+
+<section id="features" class="features">
+  <div class="card">⚖ نظام <span class="gold">وزنه</span> المرجعي</div>
+  <div class="card">🔥 حساب دقيق حسب الماء</div>
+  <div class="card">⏳ مؤقت خدرة 22 دقيقة</div>
+  <div class="card">📳 اهتزاز عند الجاهزية</div>
+</section>
+
+<section id="calculator" class="calculator">
+<div class="calc-card">
+
+<div id="step1" class="step active">
+<h2>اختر نوع الشاهي</h2>
+<select id="teaType">
+<option value="14">الحوت</option>
+<option value="13">ربيع</option>
+<option value="12">مانيس</option>
+<option value="15">أبو جبل</option>
+<option value="13">سيلاني</option>
+</select>
+<button onclick="nextStep(2)">التالي</button>
+</div>
+
+<div id="step2" class="step">
+<h2>كمية الماء (مل)</h2>
+<input type="number" id="water" placeholder="مثال 1500" />
+<button onclick="nextStep(3)">التالي</button>
+</div>
+
+<div id="step3" class="step">
+<h2>اختر قوة الشاهي</h2>
+<div class="strength">
+<button onclick="setStrength(-2,this)">خفيف</button>
+<button onclick="setStrength(-1,this)">وسط</button>
+<button class="active-strength" onclick="setStrength(0,this)">⚖ وزنه</button>
+<button onclick="setStrength(2,this)">ثقيل</button>
+</div>
+<h3 id="result">النتيجة: 0 غرام</h3>
+<button class="primary-btn" onclick="startTimer()">ابدأ الخدرة</button>
+</div>
+
+<div id="step4" class="step timer-step">
+<h2>جارٍ الخدرة...</h2>
+
+<div class="cup-container">
+<div class="cup">
+<div class="tea-fill" id="teaFill"></div>
+</div>
+</div>
+
+<div id="timeDisplay">22:00</div>
+</div>
+
+</div>
+</section>
+
+<footer>
+WAZNAH © 2026 — دقة في كل كاسة.
+</footer>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
