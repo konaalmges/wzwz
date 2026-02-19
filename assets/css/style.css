@@ -17,7 +17,6 @@ body{
   scroll-behavior:smooth;
 }
 
-/* NAVBAR */
 .navbar{
   position:fixed;
   width:100%;
@@ -42,15 +41,35 @@ body{
   font-weight:600;
 }
 
-/* HERO */
 .hero{
   height:100vh;
-  background:linear-gradient(135deg,#111,#333);
+  background:url('../images/hero.jpg') center/cover no-repeat;
   display:flex;
   justify-content:center;
   align-items:center;
   color:white;
   text-align:center;
+  position:relative;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+}
+
+.hero-img{
+  position:absolute;
+  top:120px;
+  right:60px;
+  width:220px;
+  z-index:2;
 }
 
 .primary-btn{
@@ -62,14 +81,8 @@ body{
   font-size:16px;
   border-radius:8px;
   cursor:pointer;
-  transition:.3s;
 }
 
-.primary-btn:hover{
-  opacity:.9;
-}
-
-/* FEATURES */
 .features{
   padding:100px 20px;
   display:flex;
@@ -87,7 +100,6 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.05);
 }
 
-/* CALCULATOR */
 .calculator{
   padding:100px 20px;
   display:flex;
@@ -104,26 +116,17 @@ body{
   box-shadow:0 15px 40px rgba(0,0,0,.08);
 }
 
-/* STEPS */
-.step{
-  display:none;
-}
+.step{display:none;}
+.step.active{display:block;}
 
-.step.active{
-  display:block;
-}
-
-/* INPUT */
 input{
   width:100%;
   padding:12px;
   margin:20px 0;
   border-radius:8px;
   border:1px solid #ddd;
-  font-size:16px;
 }
 
-/* BUTTONS */
 button{
   padding:10px 20px;
   border:none;
@@ -131,15 +134,8 @@ button{
   background:var(--gold);
   color:white;
   cursor:pointer;
-  transition:.3s;
-  font-size:15px;
 }
 
-button:hover{
-  opacity:.9;
-}
-
-/* TEA TYPES */
 .tea-types{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
@@ -152,11 +148,6 @@ button:hover{
   border:2px solid #eee;
   border-radius:12px;
   cursor:pointer;
-  transition:.3s;
-}
-
-.tea-card:hover{
-  border-color:var(--gold);
 }
 
 .active-tea{
@@ -164,7 +155,6 @@ button:hover{
   background:#fff6e8;
 }
 
-/* STRENGTH (وزن الشاهي) */
 .strength{
   display:flex;
   gap:10px;
@@ -176,29 +166,15 @@ button:hover{
 .strength button{
   background:#eee;
   color:#333;
-  border:2px solid transparent;
 }
 
-.strength button:hover{
-  border-color:var(--gold);
+.active-strength{
+  background:var(--gold)!important;
+  color:white!important;
 }
 
-.strength .active-strength{
-  background:var(--gold);
-  color:white;
-  border-color:var(--gold);
-}
-
-/* زر وزنة الديفلوت */
 .default-strength{
-  background:#fff6e8 !important;
-  color:#333 !important;
-  border:2px solid var(--gold) !important;
-}
-
-/* TIMER */
-.timer-step{
-  display:none;
+  border:2px solid var(--gold);
 }
 
 .cup{
@@ -225,7 +201,6 @@ button:hover{
   font-weight:bold;
 }
 
-/* FOOTER */
 footer{
   text-align:center;
   padding:30px;
