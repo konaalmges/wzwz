@@ -14,7 +14,6 @@
       <img src="assets/images/tea.jpg" class="logo-img">
       <div class="logo">WAZNAH</div>
     </div>
-
     <ul class="nav-links">
       <li><a href="#home">الرئيسية</a></li>
       <li><a href="#features">المميزات</a></li>
@@ -31,21 +30,6 @@
   </div>
 </section>
 
-<section class="features" id="features">
-  <div class="feature-card">
-    <h3>⚖ دقة محسوبة</h3>
-    <p>حساب متوازن حسب كمية الماء.</p>
-  </div>
-  <div class="feature-card">
-    <h3>🔥 على جوك</h3>
-    <p>تحكم كامل بوزنة الشاهي والسكر.</p>
-  </div>
-  <div class="feature-card">
-    <h3>⏳ وقت مضبوط</h3>
-    <p>مدة خدرة دقيقة حسب الشركة.</p>
-  </div>
-</section>
-
 <section class="calculator" id="calculator">
   <div class="calc-card">
 
@@ -56,27 +40,24 @@
     <div class="slider-wrapper">
       <div class="slider" id="slider">
 
-        <!-- STEP 1 -->
+        <!-- 1 -->
         <div class="slide">
           <h2>اختر شركة الشاهي</h2>
           <div class="tea-types" id="teaContainer"></div>
-          <button class="secondary" onclick="toggleMore()" id="moreBtn">عرض المزيد</button>
-          <div class="nav-btns">
-            <button onclick="nextSlide()">التالي</button>
-          </div>
+          <button onclick="nextSlide()">التالي</button>
         </div>
 
-        <!-- STEP 2 -->
+        <!-- 2 -->
         <div class="slide">
-          <h2>كمية الماء (مل)</h2>
-          <input type="number" id="water" placeholder="مثال: 1000">
+          <h2>كمية الماء</h2>
+          <input type="number" id="water" placeholder="1000">
           <div class="nav-btns">
-            <button class="secondary" onclick="prevSlide()">رجوع</button>
+            <button onclick="prevSlide()">رجوع</button>
             <button onclick="nextSlide()">التالي</button>
           </div>
         </div>
 
-        <!-- STEP 3 -->
+        <!-- 3 -->
         <div class="slide">
           <h2>قوة الشاهي</h2>
           <div class="strength">
@@ -86,12 +67,12 @@
             <button onclick="setTeaStrength(4,this)">ثقيل</button>
           </div>
           <div class="nav-btns">
-            <button class="secondary" onclick="prevSlide()">رجوع</button>
+            <button onclick="prevSlide()">رجوع</button>
             <button onclick="nextSlide()">التالي</button>
           </div>
         </div>
 
-        <!-- STEP 4 -->
+        <!-- 4 -->
         <div class="slide">
           <h2>قوة السكر</h2>
           <div class="strength">
@@ -102,30 +83,9 @@
           </div>
           <h3 id="result"></h3>
           <div class="nav-btns">
-            <button class="secondary" onclick="prevSlide()">رجوع</button>
-            <button onclick="showReview()">مراجعة</button>
+            <button onclick="prevSlide()">رجوع</button>
+            <button onclick="startTimer()">ابدأ</button>
           </div>
-        </div>
-
-        <!-- REVIEW -->
-        <div class="slide">
-          <h2>مراجعة</h2>
-          <div id="reviewBox"></div>
-          <div class="nav-btns">
-            <button class="secondary" onclick="prevSlide()">تعديل</button>
-            <button onclick="startTimer(false)">ابدأ</button>
-            <button onclick="startTimer(true)">وضع سريع</button>
-          </div>
-        </div>
-
-        <!-- TIMER -->
-        <div class="slide">
-          <div class="cup">
-            <div class="tea-fill" id="teaFill"></div>
-          </div>
-          <div id="timeDisplay"></div>
-          <div id="timerMessage"></div>
-          <button onclick="resetAll()">العودة للبداية</button>
         </div>
 
       </div>
@@ -137,18 +97,15 @@
   <div class="footer-container">
     <div>
       <h4>WAZNAH</h4>
-      <p>منصة احترافية لحساب وزنة الشاهي الأحمر بدقة.</p>
+      <p>منصة احترافية لحساب وزنة الشاهي.</p>
     </div>
-
     <div>
       <h4>روابط</h4>
       <ul>
         <li><a href="#home">الرئيسية</a></li>
-        <li><a href="#features">المميزات</a></li>
         <li><a href="#calculator">الحاسبة</a></li>
       </ul>
     </div>
-
     <div>
       <h4>2026 ©</h4>
       <p>جميع الحقوق محفوظة</p>
