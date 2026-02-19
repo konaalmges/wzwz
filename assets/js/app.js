@@ -1,4 +1,7 @@
-let currentStep = 1;
+window.addEventListener("scroll",function(){
+  document.getElementById("navbar")
+  .classList.toggle("scrolled",window.scrollY>50);
+}); let currentStep = 1;
 let strengthModifier = 0;
 let timerRunning = false;
 
@@ -68,4 +71,5 @@ function startTimer(){
 function scrollToCalc(){
   document.getElementById("calculator")
   .scrollIntoView({behavior:"smooth"});
+
 }
