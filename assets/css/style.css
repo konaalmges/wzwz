@@ -17,6 +17,7 @@ body{
   scroll-behavior:smooth;
 }
 
+/* NAVBAR */
 .navbar{
   position:fixed;
   width:100%;
@@ -27,6 +28,25 @@ body{
   align-items:center;
   box-shadow:0 5px 15px rgba(0,0,0,.05);
   z-index:1000;
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:bold;
+  color:var(--gold);
+}
+
+.logo-img{
+  width:45px;
+  height:45px;
+  border-radius:8px;
+  object-fit:cover;
 }
 
 .nav-links{
@@ -41,6 +61,7 @@ body{
   font-weight:600;
 }
 
+/* HERO */
 .hero{
   height:100vh;
   background:url('../images/hero.jpg') center/cover no-repeat;
@@ -56,19 +77,11 @@ body{
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,.55);
+  background:rgba(0,0,0,.6);
 }
 
 .hero-content{
   position:relative;
-  z-index:2;
-}
-
-.hero-img{
-  position:absolute;
-  top:120px;
-  right:60px;
-  width:220px;
   z-index:2;
 }
 
@@ -83,6 +96,7 @@ body{
   cursor:pointer;
 }
 
+/* FEATURES */
 .features{
   padding:100px 20px;
   display:flex;
@@ -100,6 +114,7 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.05);
 }
 
+/* CALCULATOR */
 .calculator{
   padding:100px 20px;
   display:flex;
@@ -171,10 +186,6 @@ button{
 .active-strength{
   background:var(--gold)!important;
   color:white!important;
-}
-
-.default-strength{
-  border:2px solid var(--gold);
 }
 
 .cup{
