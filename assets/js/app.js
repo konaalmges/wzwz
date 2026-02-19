@@ -1,193 +1,152 @@
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+/* ================================
+   WZWZ TEA APP
+   Clean Professional Version
+================================ */
 
-:root{
-  --gold:#c6a25d;
-  --dark:#111;
-  --light:#f8f8f8;
+let state = {
+  company: null,
+  strength: 0,
+  quickMode: false
+};
+
+const companies = {
+  rabea: { name: "ربيع", baseTime: 22 },
+  kabous: { name: "كبوس", baseTime: 23 },
+  lipton: { name: "ليبتون", baseTime: 21 },
+  alghazalain: { name: "الغزالين", baseTime: 24 },
+  safa: { name: "صفا", baseTime: 22 },
+  harith: { name: "الحارث", baseTime: 23 }
+};
+
+/* ================================
+   STEP NAVIGATION
+================================ */
+
+function nextStep(stepId){
+  document.querySelectorAll(".step").forEach(step=>{
+    step.classList.remove("active");
+  });
+
+  document.getElementById(stepId).classList.add("active");
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
-body{
-  background:var(--light);
-  color:#333;
-  scroll-behavior:smooth;
+/* ================================
+   SELECT COMPANY
+================================ */
+
+function selectCompany(key, btn){
+  state.company = key;
+
+  document.querySelectorAll(".company-card").forEach(card=>{
+    card.classList.remove("active-card");
+  });
+
+  btn.classList.add("active-card");
+
+  nextStep("step2");
+  saveState();
 }
 
-/* NAVBAR */
-.navbar{
-  position:fixed;
-  top:0;
-  width:100%;
-  padding:15px 30px;
-  background:white;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 5px 15px rgba(0,0,0,.05);
-  z-index:1000;
+/* ================================
+   SET STRENGTH
+================================ */
+
+function setTeaStrength(value, btn){
+  state.strength = value;
+
+  document.querySelectorAll("#teaStrength button").forEach(b=>{
+    b.classList.remove("active-strength");
+  });
+
+  btn.classList.add("active-strength");
+
+  nextStep("step3");
+  saveState();
 }
 
-.logo{font-size:22px;font-weight:bold;color:var(--gold);}
-.logo-img{width:45px;height:45px;border-radius:8px;object-fit:cover;}
+/* ================================
+   QUICK MODE
+================================ */
 
-.nav-links{list-style:none;display:flex;gap:20px;}
-.nav-links a{text-decoration:none;color:#333;font-weight:600;}
+function toggleQuickMode(){
+  state.quickMode = !state.quickMode;
 
-/* HERO */
-.hero{
-  height:100vh;
-  background:
-    linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.65)),
-    url('../images/hero.jpg');
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:white;
-  text-align:center;
-  padding:20px;
+  const btn = document.getElementById("quickBtn");
+
+  if(state.quickMode){
+    btn.classList.add("active-quick");
+  } else {
+    btn.classList.remove("active-quick");
+  }
+
+  saveState();
 }
 
-.hero-content h1{font-size:32px;margin-bottom:15px;}
-.hero-content p{opacity:.9;margin-bottom:25px;}
+/* ================================
+   CALCULATE RESULT
+================================ */
 
-.primary-btn{
-  padding:14px 32px;
-  border:none;
-  background:var(--gold);
-  color:white;
-  font-size:16px;
-  border-radius:12px;
-  cursor:pointer;
-  transition:.3s;
-  box-shadow:0 10px 25px rgba(0,0,0,.3);
+function calculateTea(){
+
+  if(!state.company){
+    alert("اختر نوع الشاهي أولاً");
+    return;
+  }
+
+  let baseTime = companies[state.company].baseTime;
+
+  let finalTime = baseTime + state.strength;
+
+  if(state.quickMode){
+    finalTime -= 3;
+  }
+
+  if(finalTime < 15){
+    finalTime = 15;
+  }
+
+  const resultBox = document.getElementById("resultBox");
+
+  resultBox.innerHTML = `
+    <h3>النتيجة</h3>
+    <p>شركة: ${companies[state.company].name}</p>
+    <p>مدة الغلي: ${finalTime} دقيقة</p>
+    ${state.quickMode ? "<p>وضع سريع مفعل ⚡</p>" : ""}
+  `;
+
+  nextStep("step4");
 }
 
-.primary-btn:hover{transform:translateY(-3px);}
+/* ================================
+   RESET
+================================ */
 
-/* FEATURES */
-.features{
-  padding:120px 20px 80px;
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  flex-wrap:wrap;
+function resetAll(){
+  state = {
+    company: null,
+    strength: 0,
+    quickMode: false
+  };
+
+  localStorage.removeItem("teaState");
+  location.reload();
 }
 
-.card{
-  background:white;
-  padding:30px;
-  border-radius:15px;
-  width:250px;
-  text-align:center;
-  box-shadow:0 10px 30px rgba(0,0,0,.05);
-  transition:.3s;
+/* ================================
+   SAVE / LOAD
+================================ */
+
+function saveState(){
+  localStorage.setItem("teaState", JSON.stringify(state));
 }
 
-.card:hover{transform:translateY(-5px);}
+function loadState(){
+  const saved = localStorage.getItem("teaState");
 
-/* CALCULATOR */
-.calculator{
-  padding:120px 20px;
-  display:flex;
-  justify-content:center;
+  if(saved){
+    state = JSON.parse(saved);
+  }
 }
 
-.calc-card{
-  background:white;
-  padding:40px;
-  border-radius:20px;
-  width:100%;
-  max-width:500px;
-  text-align:center;
-  box-shadow:0 15px 40px rgba(0,0,0,.08);
-}
-
-.step{display:none;}
-.step.active{display:block;}
-
-input{
-  width:100%;
-  padding:12px;
-  margin:20px 0;
-  border-radius:10px;
-  border:1px solid #ddd;
-  font-size:15px;
-}
-
-.tea-types{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-  gap:15px;
-  margin:20px 0;
-}
-
-.tea-card{
-  padding:20px;
-  border:2px solid #eee;
-  border-radius:12px;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.tea-card:hover{border-color:var(--gold);}
-.active-tea{
-  border-color:var(--gold);
-  background:#fff6e8;
-}
-
-.strength{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  margin:20px 0;
-  flex-wrap:wrap;
-}
-
-.strength button{
-  background:#eee;
-  color:#333;
-  border-radius:30px;
-  padding:10px 18px;
-  font-weight:600;
-  transition:.2s;
-}
-
-.active-strength{
-  background:var(--gold)!important;
-  color:white!important;
-}
-
-/* TIMER */
-.cup{
-  width:120px;
-  height:150px;
-  border:4px solid #333;
-  border-radius:0 0 40px 40px;
-  margin:0 auto 20px;
-  position:relative;
-  overflow:hidden;
-}
-
-.tea-fill{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:0%;
-  background:#6b3e26;
-  transition:height 1s linear;
-}
-
-#timeDisplay{
-  font-size:22px;
-  font-weight:bold;
-}
-
-/* FOOTER */
-footer{
-  text-align:center;
-  padding:30px;
-  background:#111;
-  color:white;
-}
+loadState();
