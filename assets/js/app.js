@@ -14,6 +14,9 @@ let sugarGrams = 0;
 
 let timer = null;
 
+/* 👇 غير وقت الخدرة من هنا فقط */
+let khadraTime = 5; // بالدقائق
+
 /* =========================
    تنقل
 ========================= */
@@ -100,13 +103,9 @@ function calculate(){
   let water = parseInt(document.getElementById("water").value);
   if(!water || !selectedRatio) return;
 
-  /* حساب الشاهي */
   teaGrams = ((water / 1000) * selectedRatio) + teaStrength;
-
-  /* قاعدة السكر 30غ لكل لتر */
   sugarGrams = ((water / 1000) * 30) + sugarStrength;
 
-  /* حماية من القيم السالبة */
   if(teaGrams < 0) teaGrams = 0;
   if(sugarGrams < 0) sugarGrams = 0;
 
@@ -132,7 +131,8 @@ function startTimer(){
 
   nextStep(5);
 
-  let total = 2 * 60;
+  let total = khadraTime * 60;
+  let fullTime = khadraTime * 60;
   let fill = document.getElementById("teaFill");
 
   timer = setInterval(() => {
@@ -143,7 +143,7 @@ function startTimer(){
     document.getElementById("timeDisplay").innerText =
       `${m}:${s < 10 ? "0" : ""}${s}`;
 
-    let percent = ((2*60 - total) / (2*60)) * 100;
+    let percent = ((fullTime - total) / fullTime) * 100;
     fill.style.height = percent + "%";
 
     total--;
