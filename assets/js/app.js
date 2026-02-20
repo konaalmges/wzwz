@@ -1,11 +1,13 @@
 /* =========================
-   Supabase Setup
+   Supabase Setup (FINAL)
 ========================= */
 
 const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
 const supabaseKey = "sb_publishable_sIUYhUWISktMtPV4_vXP7g_8n97z7K5";
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+let currentUser = null;
 
 /* تسجيل دخول تلقائي */
 async function login() {
@@ -14,7 +16,8 @@ async function login() {
   if (error) {
     console.error("Login error:", error);
   } else {
-    console.log("Logged in:", data);
+    currentUser = data.user;
+    console.log("Logged in ✅");
   }
 }
 
@@ -22,10 +25,9 @@ login();
 
 /* حفظ النتيجة */
 async function saveResult() {
-  const { data: userData, error: userError } = await supabase.auth.getUser();
 
-  if (userError || !userData.user) {
-    console.error("User not found");
+  if (!currentUser) {
+    console.log("User not ready yet...");
     return;
   }
 
@@ -33,7 +35,7 @@ async function saveResult() {
     .from("results")
     .insert([
       {
-        user_id: userData.user.id,
+        user_id: currentUser.id,
         tea: teaGrams,
         sugar: sugarGrams
       }
@@ -157,9 +159,6 @@ function calculate(){
 
   document.getElementById("result").innerText =
     `النتيجة: ${teaGrams.toFixed(1)} غرام شاهي + ${sugarGrams.toFixed(1)} غرام سكر`;
-
-  // 🔥 نحفظ النتيجة تلقائي بعد الحساب
-  saveResult();
 }
 
 /* =========================
@@ -172,6 +171,9 @@ function startTimer(){
     alert("احسب الكمية أولاً");
     return;
   }
+
+  // 🔥 نحفظ هنا فقط مرة واحدة
+  saveResult();
 
   if(timer){
     clearInterval(timer);
