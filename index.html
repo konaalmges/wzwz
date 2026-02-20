@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAZNAH | احسب وزنة الشاهي</title>
+<title>حاسبة الشاهي</title>
 
 <link rel="stylesheet" href="assets/css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -11,70 +11,72 @@
 
 <body>
 
-<nav class="navbar">
-  <div class="logo">WAZNAH</div>
-</nav>
+<header class="hero">
+  <div class="hero-content">
+    <h1>احسب وزنة الشاهي ☕</h1>
+    <p>خل شاهيـك مضبوط عليك</p>
+    <button onclick="scrollToCalc()" class="btn">ابدأ الآن</button>
+  </div>
+  <img src="assets/images/tea.jpg" class="tea-banner">
+</header>
 
-<section class="calculator">
+<section id="calculator" class="calculator">
 
-  <div class="calc-card">
+<div class="step active" id="step1">
+  <h2>اختر نوع الشاهي</h2>
 
-    <!-- STEP 1 -->
-    <div class="step active" id="step1">
-      <h2>اختر نوع الشاهي</h2>
-
-      <div class="tea-types">
-        <div class="tea-card" data-ratio="18" onclick="selectTea(this)">الحوت</div>
-        <div class="tea-card" data-ratio="20" onclick="selectTea(this)">ربيع</div>
-        <div class="tea-card" data-ratio="22" onclick="selectTea(this)">امننيس</div>
-        <div class="tea-card" data-ratio="24" onclick="selectTea(this)">أبو جبل</div>
-        <div class="tea-card" data-ratio="26" onclick="selectTea(this)">سيلاني</div>
-      </div>
-
-      <button onclick="nextStep(2)">التالي</button>
-    </div>
-
-    <!-- STEP 2 -->
-    <div class="step" id="step2">
-      <h2>كمية الماء (مل)</h2>
-      <input type="number" id="water" placeholder="مثال 1000">
-      <button onclick="nextStep(3)">التالي</button>
-    </div>
-
-    <!-- STEP 3 -->
-    <div class="step" id="step3">
-      <h2>وزن الشاهي</h2>
-      <div class="strength" id="teaStrength">
-        <button onclick="setTeaStrength(-2,this)">خفيف</button>
-        <button onclick="setTeaStrength(0,this)" class="default-tea">وزنة</button>
-        <button onclick="setTeaStrength(2,this)">متوسط</button>
-        <button onclick="setTeaStrength(4,this)">ثقيل</button>
-      </div>
-
-      <h2>وزن السكر</h2>
-      <div class="strength" id="sugarStrength">
-        <button onclick="setSugarStrength(-5,this)">خفيف</button>
-        <button onclick="setSugarStrength(0,this)" class="default-sugar">وزنة</button>
-        <button onclick="setSugarStrength(5,this)">متوسط</button>
-        <button onclick="setSugarStrength(10,this)">ثقيل</button>
-      </div>
-
-      <h3 id="result">النتيجة: 0 غرام شاهي + 0 غرام سكر</h3>
-
-      <button onclick="startTimer()">ابدأ الخدرة</button>
-    </div>
-
-    <!-- STEP 4 -->
-    <div class="step" id="step4">
-      <div class="cup">
-        <div class="tea-fill" id="teaFill"></div>
-      </div>
-      <div id="timeDisplay">00:00</div>
-    </div>
-
+  <div class="tea-options">
+    <div class="tea-card" data-ratio="15" onclick="selectTea(this)">شاهي أحمر ثقيل</div>
+    <div class="tea-card" data-ratio="12" onclick="selectTea(this)">شاهي أحمر عادي</div>
+    <div class="tea-card" data-ratio="10" onclick="selectTea(this)">شاهي أخضر</div>
+    <div class="tea-card" data-ratio="8" onclick="selectTea(this)">شاهي كرك</div>
   </div>
 
+  <button class="btn" onclick="nextStep(2)">التالي</button>
+</div>
+
+<div class="step" id="step2">
+  <h2>كمية الماء (مل)</h2>
+  <input type="number" id="water" placeholder="مثال: 1000">
+  <button class="btn" onclick="nextStep(3)">التالي</button>
+</div>
+
+<div class="step" id="step3">
+
+  <h2>قوة الشاهي</h2>
+  <div id="teaStrength" class="strength-box">
+    <button onclick="setTeaStrength(-2,this)">خفيف</button>
+    <button class="active-strength" onclick="setTeaStrength(0,this)">وزنة</button>
+    <button onclick="setTeaStrength(2,this)">ثقيل</button>
+  </div>
+
+  <h2>قوة السكر</h2>
+  <div id="sugarStrength" class="strength-box">
+    <button onclick="setSugarStrength(-5,this)">خفيف</button>
+    <button class="active-strength" onclick="setSugarStrength(0,this)">وزنة</button>
+    <button onclick="setSugarStrength(5,this)">ثقيل</button>
+  </div>
+
+  <button class="btn" onclick="calculate(); nextStep(4)">احسب</button>
+</div>
+
+<div class="step" id="step4">
+  <h2 id="result">النتيجة:</h2>
+  <button class="btn" onclick="startTimer()">ابدأ المؤقت</button>
+</div>
+
+<div class="step" id="step5">
+  <h2 id="timeDisplay">1:00</h2>
+  <div class="cup">
+    <div id="teaFill"></div>
+  </div>
+</div>
+
 </section>
+
+<footer>
+  <p>© 2026 Tea Calculator</p>
+</footer>
 
 <script src="assets/js/app.js"></script>
 </body>
