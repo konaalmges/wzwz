@@ -1,12 +1,4 @@
-const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
-const supabaseKey = "YOUR_PUBLIC_KEY";
-
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-async function login(){
- await supabase.auth.signInAnonymously();
-}
-login();
+let selectedRatio=0;
 
 let selectedRatio=0;
 let teaStrength=0;
