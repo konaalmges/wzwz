@@ -1,123 +1,127 @@
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI}
+
+:root{
+--gold:#c6a25d;
+--bg:#f5f6f8;
+--dark:#1a1a1a;
+}
+
 body{
-margin:0;
-font-family:Tahoma;
-background:#f5f5f5;
-text-align:center;
-}
-
-.hero{
-background:url("../images/hero.jpg") center/cover no-repeat;
-height:80vh;
+background:var(--bg);
 display:flex;
+flex-direction:column;
 align-items:center;
-justify-content:center;
-position:relative;
-color:white;
 }
 
-.hero-content{
-background:rgba(0,0,0,0.5);
-padding:30px;
-border-radius:15px;
-}
-
-.tea-banner{
-position:absolute;
-bottom:20px;
-left:20px;
-width:180px;
-}
-
-.btn{
-background:#b22222;
-color:white;
-padding:10px 20px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-margin-top:15px;
-}
-
-.calculator{
-padding:40px 20px;
-}
-
-.step{
-display:none;
-}
-
-.step.active{
-display:block;
-}
-
-.tea-options{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-}
-
-.tea-card{
+.navbar{
+width:100%;
+padding:15px;
 background:white;
-padding:15px 20px;
-margin:10px;
-border-radius:10px;
-cursor:pointer;
+text-align:center;
+font-weight:bold;
+color:var(--gold);
+box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
 
-.active-tea{
-background:#b22222;
-color:white;
+.app{
+width:100%;
+max-width:420px;
+padding:20px;
 }
 
-.strength-box{
-display:flex;
-justify-content:center;
-gap:15px;
+.card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 20px 40px rgba(0,0,0,.08);
+}
+
+.progress{
+height:6px;
+background:#eee;
+border-radius:5px;
+overflow:hidden;
 margin-bottom:20px;
 }
 
-.strength-box button{
-padding:10px 20px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-background:#eee;
+.progress-bar{
+height:6px;
+width:20%;
+background:var(--gold);
+transition:.3s;
 }
 
-.active-strength{
-background:#b22222 !important;
-color:white;
+.step{display:none;animation:fade .3s ease}
+.step.active{display:block}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1;transform:none}
+}
+
+.tea-types{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:15px;
+}
+
+.tea-card{
+padding:15px;
+border:2px solid #eee;
+border-radius:12px;
+text-align:center;
+cursor:pointer;
+}
+
+.tea-card.active{
+border-color:var(--gold);
+background:#fff6e8;
 }
 
 input{
-padding:10px;
-width:200px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-.cup{
-width:100px;
-height:150px;
-border:3px solid #333;
-margin:20px auto;
-position:relative;
-overflow:hidden;
-border-radius:10px;
-}
-
-#teaFill{
-position:absolute;
-bottom:0;
 width:100%;
-height:0;
-background:brown;
-transition:1s;
+padding:12px;
+margin-top:15px;
+border-radius:10px;
+border:1px solid #ddd;
 }
 
-footer{
-background:#222;
+.strength{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:15px;
+}
+
+.strength button{
+flex:1;
+padding:8px;
+border:none;
+border-radius:8px;
+background:#eee;
+}
+
+.strength .active{
+background:var(--gold);
 color:white;
-padding:15px;
-margin-top:30px;
+}
+
+.buttons{
+display:flex;
+justify-content:space-between;
+margin-top:20px;
+}
+
+.buttons button{
+padding:10px 20px;
+border:none;
+border-radius:8px;
+background:var(--gold);
+color:white;
+}
+
+#backBtn{
+background:#ccc;
+color:#333;
 }
