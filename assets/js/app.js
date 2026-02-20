@@ -1,230 +1,79 @@
-/* =========================
-   Supabase Setup (FINAL)
-========================= */
-
 const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
-const supabaseKey = "sb_publishable_sIUYhUWISktMtPV4_vXP7g_8n97z7K5";
+const supabaseKey = "YOUR_PUBLIC_KEY";
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-let currentUser = null;
-
-/* تسجيل دخول تلقائي */
-async function login() {
-  const { data, error } = await supabase.auth.signInAnonymously();
-
-  if (error) {
-    console.error("Login error:", error);
-  } else {
-    currentUser = data.user;
-    console.log("Logged in ✅");
-  }
+async function login(){
+ await supabase.auth.signInAnonymously();
 }
-
 login();
 
-/* حفظ النتيجة */
-async function saveResult() {
-
-  if (!currentUser) {
-    console.log("User not ready yet...");
-    return;
-  }
-
-  const { error } = await supabase
-    .from("results")
-    .insert([
-      {
-        user_id: currentUser.id,
-        tea: teaGrams,
-        sugar: sugarGrams
-      }
-    ]);
-
-  if (error) {
-    console.error("Insert error:", error);
-  } else {
-    console.log("Result saved ✅");
-  }
-}
-
-/* =========================
-   متغيرات
-========================= */
-
-let selectedRatio = 0;
-
-/* الشاهي */
-let teaStrength = 0;
-let teaGrams = 0;
-
-/* السكر */
-let sugarStrength = 0;
-let sugarGrams = 0;
-
-let timer = null;
-let khadraTime = 1; // بالدقائق
-
-/* =========================
-   تنقل
-========================= */
+let selectedRatio=0;
+let teaStrength=0;
+let sugarStrength=0;
+let timer=null;
+let totalTime=60;
 
 function scrollToCalc(){
-  document.getElementById("calculator")
-  .scrollIntoView({behavior:"smooth"});
+ document.getElementById("calculator").scrollIntoView({behavior:"smooth"});
 }
 
 function nextStep(step){
-
-  if(step === 2 && selectedRatio === 0){
-    alert("اختر نوع الشاهي أولاً");
-    return;
-  }
-
-  if(step === 3){
-    let water = parseInt(document.getElementById("water").value);
-    if(!water || water <= 0){
-      alert("أدخل كمية ماء صحيحة");
-      return;
-    }
-  }
-
-  document.querySelectorAll(".step")
-  .forEach(s => s.classList.remove("active"));
-
-  document.getElementById("step" + step)
-  .classList.add("active");
-
-  calculate();
+ document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+ document.getElementById("step"+step).classList.add("active");
 }
-
-/* =========================
-   اختيار نوع
-========================= */
 
 function selectTea(card){
-  document.querySelectorAll(".tea-card")
-  .forEach(c => c.classList.remove("active-tea"));
-
-  card.classList.add("active-tea");
-  selectedRatio = parseInt(card.dataset.ratio);
-
-  calculate();
+ document.querySelectorAll(".tea-card").forEach(c=>c.classList.remove("active-tea"));
+ card.classList.add("active-tea");
+ selectedRatio=parseInt(card.dataset.ratio);
 }
 
-/* =========================
-   وزن الشاهي
-========================= */
-
-function setTeaStrength(value, btn){
-  teaStrength = value;
-
-  document.querySelectorAll("#teaStrength button")
-  .forEach(b => b.classList.remove("active-strength"));
-
-  btn.classList.add("active-strength");
-
-  calculate();
+function setTeaStrength(value,btn){
+ teaStrength=value;
+ document.querySelectorAll("#teaStrength button").forEach(b=>b.classList.remove("active-strength"));
+ btn.classList.add("active-strength");
 }
 
-/* =========================
-   وزن السكر
-========================= */
-
-function setSugarStrength(value, btn){
-  sugarStrength = value;
-
-  document.querySelectorAll("#sugarStrength button")
-  .forEach(b => b.classList.remove("active-strength"));
-
-  btn.classList.add("active-strength");
-
-  calculate();
+function setSugarStrength(value,btn){
+ sugarStrength=value;
+ document.querySelectorAll("#sugarStrength button").forEach(b=>b.classList.remove("active-strength"));
+ btn.classList.add("active-strength");
 }
-
-/* =========================
-   الحساب
-========================= */
 
 function calculate(){
+ let water=parseInt(document.getElementById("water").value);
+ if(!water || !selectedRatio){
+   alert("اختر نوع الشاهي وادخل كمية الماء");
+   return;
+ }
 
-  let water = parseInt(document.getElementById("water").value);
-  if(!water || !selectedRatio) return;
+ let teaGrams=(water/1000)*selectedRatio + teaStrength;
+ let sugarGrams=(water/1000)*30 + sugarStrength;
 
-  teaGrams = ((water / 1000) * selectedRatio) + teaStrength;
-  sugarGrams = ((water / 1000) * 30) + sugarStrength;
-
-  if(teaGrams < 0) teaGrams = 0;
-  if(sugarGrams < 0) sugarGrams = 0;
-
-  document.getElementById("result").innerText =
-    `النتيجة: ${teaGrams.toFixed(1)} غرام شاهي + ${sugarGrams.toFixed(1)} غرام سكر`;
+ document.getElementById("result").innerHTML=
+ `تحتاج ${teaGrams.toFixed(1)} جم شاهي و ${sugarGrams.toFixed(1)} جم سكر`;
 }
-
-/* =========================
-   المؤقت
-========================= */
 
 function startTimer(){
+ nextStep(5);
+ let time=totalTime;
+ const fill=document.getElementById("teaFill");
 
-  if(teaGrams <= 0){
-    alert("احسب الكمية أولاً");
-    return;
-  }
+ timer=setInterval(()=>{
+   time--;
 
-  // 🔥 نحفظ هنا فقط مرة واحدة
-  saveResult();
+   let percent=((totalTime-time)/totalTime)*100;
+   fill.style.height=percent+"%";
 
-  if(timer){
-    clearInterval(timer);
-    timer = null;
-  }
+   let minutes=Math.floor(time/60);
+   let seconds=time%60;
+   document.getElementById("timeDisplay").innerText=
+   minutes+":"+(seconds<10?"0"+seconds:seconds);
 
-  nextStep(5);
+   if(time<=0){
+     clearInterval(timer);
+   }
 
-  let total = khadraTime * 60;
-  let fullTime = khadraTime * 60;
-  let fill = document.getElementById("teaFill");
-
-  timer = setInterval(() => {
-
-    let m = Math.floor(total / 60);
-    let s = total % 60;
-
-    document.getElementById("timeDisplay").innerText =
-      `${m}:${s < 10 ? "0" : ""}${s}`;
-
-    let percent = ((fullTime - total) / fullTime) * 100;
-    fill.style.height = percent + "%";
-
-    total--;
-
-    if(total < 0){
-      clearInterval(timer);
-      timer = null;
-      document.getElementById("timeDisplay").innerText = "جاهز ☕";
-    }
-
-  },1000);
+ },1000);
 }
-
-/* =========================
-   التهيئة
-========================= */
-
-window.addEventListener("DOMContentLoaded",()=>{
-
-  let defaultTea = document.querySelector(".default-tea");
-  if(defaultTea){
-    defaultTea.classList.add("active-strength");
-  }
-
-  let defaultSugar = document.querySelector(".default-sugar");
-  if(defaultSugar){
-    defaultSugar.classList.add("active-strength");
-  }
-
-  document.getElementById("water")
-  .addEventListener("input",calculate);
-
-});
