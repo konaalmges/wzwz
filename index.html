@@ -1,80 +1,18 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAZNAH PRO</title>
-<link rel="stylesheet" href="style.css">
+<title>اختبار الربط</title>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="logo">WAZNAH</div>
-</nav>
+<h1 id="title">اختبار الربط</h1>
 
-<section class="app">
+<button onclick="changeText()">اضغطني</button>
 
-<div class="card">
-
-<div class="progress">
-<div class="progress-bar" id="progressBar"></div>
-</div>
-
-<!-- STEP 1 -->
-<div class="step active" id="step1">
-<h2>اختر شركة الشاهي</h2>
-<div class="tea-types">
-<div class="tea-card" data-ratio="18">الحوت</div>
-<div class="tea-card" data-ratio="20">ربيع</div>
-<div class="tea-card" data-ratio="22">المنيس</div>
-<div class="tea-card" data-ratio="24">أبو جبل</div>
-<div class="tea-card" data-ratio="26">سيلاني</div>
-</div>
-</div>
-
-<!-- STEP 2 -->
-<div class="step" id="step2">
-<h2>كمية الماء (مل)</h2>
-<input type="number" id="water" placeholder="مثال: 1000">
-</div>
-
-<!-- STEP 3 -->
-<div class="step" id="step3">
-<h2>قوة الشاهي</h2>
-<div class="strength" id="teaStrength">
-<button data-val="-2">خفيف</button>
-<button data-val="0" class="active">وزنة</button>
-<button data-val="2">متوسط</button>
-<button data-val="4">ثقيل</button>
-</div>
-</div>
-
-<!-- STEP 4 -->
-<div class="step" id="step4">
-<h2>قوة السكر</h2>
-<div class="strength" id="sugarStrength">
-<button data-val="-5">خفيف</button>
-<button data-val="0" class="active">وزنة</button>
-<button data-val="5">متوسط</button>
-<button data-val="10">حالي</button>
-</div>
-<h3 id="result"></h3>
-</div>
-
-<!-- STEP 5 -->
-<div class="step" id="step5">
-<h2>المراجعة</h2>
-<div id="reviewBox"></div>
-</div>
-
-<div class="buttons">
-<button id="backBtn">رجوع</button>
-<button id="nextBtn">التالي</button>
-</div>
-
-</div>
-</section>
-
-<script src="app.js"></script>
+<script src="assets/js/app.js"></script>
 </body>
 </html>
