@@ -4,77 +4,78 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WAZNAH | احسب وزنة الشاهي</title>
+
 <link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
 
 <nav class="navbar">
-  <div class="nav-right">
-    <img src="assets/images/tea.jpg" class="logo-img">
-    <div class="logo">WAZNAH</div>
-  </div>
-
-  <ul class="nav-links">
-    <li><a href="#home">الرئيسية</a></li>
-    <li><a href="#features">المميزات</a></li>
-    <li><a href="#calculator">احسب</a></li>
-  </ul>
+  <div class="logo">WAZNAH</div>
 </nav>
 
-<section class="hero" id="home">
-  <div class="hero-content">
-    <h1>وزنة عزوز السليطي المثالية</h1>
-    <p>احسب الكمية بدقة وابدأ الخدرة بطريقة احترافية ☕</p>
-    <button class="primary-btn" onclick="scrollToCalc()">ابدأ الآن</button>
-  </div>
-</section>
+<section class="calculator">
 
-<section class="features" id="features">
-  <div class="card">
-    <h3>⚖ دقة محسوبة</h3>
-    <p>حساب متوازن حسب كمية الماء.</p>
-  </div>
-  <div class="card">
-    <h3>🔥 تحكم بالوزنة</h3>
-    <p>اختيار وزن الشاهي والسكر.</p>
-  </div>
-  <div class="card">
-    <h3>⏳ مؤقت احترافي</h3>
-    <p>22 دقيقة مضبوطة لنتيجة مثالية.</p>
-  </div>
-</section>
-
-<section class="calculator" id="calculator">
   <div class="calc-card">
 
     <!-- STEP 1 -->
     <div class="step active" id="step1">
       <h2>اختر نوع الشاهي</h2>
+
       <div class="tea-types">
-        <div class="tea-card" data-ratio="18" onclick="selectTea(this)"><h3>الحوت</h3></div>
-        <div class="tea-card" data-ratio="20" onclick="selectTea(this)"><h3>ربيع</h3></div>
-        <div class="tea-card" data-ratio="22" onclick="selectTea(this)"><h3>امننيس</h3></div>
-        <div class="tea-card" data-ratio="24" onclick="selectTea(this)"><h3>أبو جبل</h3></div>
-        <div class="tea-card" data-ratio="26" onclick="selectTea(this)"><h3>سيلاني</h3></div>
+        <div class="tea-card" data-ratio="18" onclick="selectTea(this)">الحوت</div>
+        <div class="tea-card" data-ratio="20" onclick="selectTea(this)">ربيع</div>
+        <div class="tea-card" data-ratio="22" onclick="selectTea(this)">امننيس</div>
+        <div class="tea-card" data-ratio="24" onclick="selectTea(this)">أبو جبل</div>
+        <div class="tea-card" data-ratio="26" onclick="selectTea(this)">سيلاني</div>
       </div>
+
       <button onclick="nextStep(2)">التالي</button>
     </div>
 
-    <!-- باقي الخطوات بدون تغيير -->
-    <!-- (ما غيرت محتواها) -->
+    <!-- STEP 2 -->
+    <div class="step" id="step2">
+      <h2>كمية الماء (مل)</h2>
+      <input type="number" id="water" placeholder="مثال 1000">
+      <button onclick="nextStep(3)">التالي</button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step3">
+      <h2>وزن الشاهي</h2>
+      <div class="strength" id="teaStrength">
+        <button onclick="setTeaStrength(-2,this)">خفيف</button>
+        <button onclick="setTeaStrength(0,this)" class="default-tea">وزنة</button>
+        <button onclick="setTeaStrength(2,this)">متوسط</button>
+        <button onclick="setTeaStrength(4,this)">ثقيل</button>
+      </div>
+
+      <h2>وزن السكر</h2>
+      <div class="strength" id="sugarStrength">
+        <button onclick="setSugarStrength(-5,this)">خفيف</button>
+        <button onclick="setSugarStrength(0,this)" class="default-sugar">وزنة</button>
+        <button onclick="setSugarStrength(5,this)">متوسط</button>
+        <button onclick="setSugarStrength(10,this)">ثقيل</button>
+      </div>
+
+      <h3 id="result">النتيجة: 0 غرام شاهي + 0 غرام سكر</h3>
+
+      <button onclick="startTimer()">ابدأ الخدرة</button>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" id="step4">
+      <div class="cup">
+        <div class="tea-fill" id="teaFill"></div>
+      </div>
+      <div id="timeDisplay">00:00</div>
+    </div>
 
   </div>
+
 </section>
 
-<footer>
-  © 2026 WAZNAH
-</footer>
-
-<!-- ✅ Supabase أولاً -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- ✅ ثم ملفك -->
 <script src="assets/js/app.js"></script>
-
 </body>
 </html>
