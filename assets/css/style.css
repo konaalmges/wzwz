@@ -1,268 +1,123 @@
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Segoe UI',sans-serif;
-}
-
-:root{
-  --gold:#c6a25d;
-  --dark:#111;
-  --light:#f9f9f9;
-}
-
 body{
-  background:var(--light);
-  color:#333;
-  scroll-behavior:smooth;
-  padding-top:80px; /* 👈 عشان الناف بار الثابت */
+margin:0;
+font-family:Tahoma;
+background:#f5f5f5;
+text-align:center;
 }
 
-/* NAVBAR */
-.navbar{
-  position:fixed;
-  top:0;
-  width:100%;
-  padding:15px 40px;
-  background:white;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 5px 15px rgba(0,0,0,.05);
-  z-index:1000;
-}
-
-.nav-right{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.logo{
-  font-size:22px;
-  font-weight:bold;
-  color:var(--gold);
-}
-
-.logo-img{
-  width:45px;
-  height:45px;
-  border-radius:8px;
-  object-fit:cover;
-}
-
-.nav-links{
-  list-style:none;
-  display:flex;
-  gap:20px;
-}
-
-.nav-links a{
-  text-decoration:none;
-  color:#333;
-  font-weight:600;
-  transition:.3s;
-}
-
-.nav-links a:hover{
-  color:var(--gold);
-}
-
-/* HERO */
 .hero{
-  height:100vh;
-  background:url('../images/hero.jpg') center/cover no-repeat;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:white;
-  text-align:center;
-  position:relative;
-}
-
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,.6);
+background:url("../images/hero.jpg") center/cover no-repeat;
+height:80vh;
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+color:white;
 }
 
 .hero-content{
-  position:relative;
-  z-index:2;
+background:rgba(0,0,0,0.5);
+padding:30px;
+border-radius:15px;
 }
 
-.primary-btn{
-  margin-top:20px;
-  padding:12px 25px;
-  border:none;
-  background:var(--gold);
-  color:white;
-  font-size:16px;
-  border-radius:8px;
-  cursor:pointer;
-  transition:.3s;
+.tea-banner{
+position:absolute;
+bottom:20px;
+left:20px;
+width:180px;
 }
 
-.primary-btn:hover{
-  background:#b08d4b;
+.btn{
+background:#b22222;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-top:15px;
 }
 
-/* FEATURES */
-.features{
-  padding:100px 20px;
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  flex-wrap:wrap;
-}
-
-.card{
-  background:white;
-  padding:30px;
-  border-radius:15px;
-  width:250px;
-  text-align:center;
-  box-shadow:0 10px 30px rgba(0,0,0,.05);
-  transition:.3s;
-}
-
-.card:hover{
-  transform:translateY(-5px);
-}
-
-/* CALCULATOR */
 .calculator{
-  padding:100px 20px;
-  display:flex;
-  justify-content:center;
+padding:40px 20px;
 }
 
-.calc-card{
-  background:white;
-  padding:40px;
-  border-radius:20px;
-  width:100%;
-  max-width:500px;
-  text-align:center;
-  box-shadow:0 15px 40px rgba(0,0,0,.08);
+.step{
+display:none;
 }
 
-.step{display:none;}
-.step.active{display:block;}
-
-input{
-  width:100%;
-  padding:12px;
-  margin:20px 0;
-  border-radius:8px;
-  border:1px solid #ddd;
+.step.active{
+display:block;
 }
 
-button{
-  padding:10px 20px;
-  border:none;
-  border-radius:8px;
-  background:var(--gold);
-  color:white;
-  cursor:pointer;
-  transition:.3s;
-}
-
-button:hover{
-  background:#b08d4b;
-}
-
-.tea-types{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-  gap:15px;
-  margin:20px 0;
+.tea-options{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
 }
 
 .tea-card{
-  padding:20px;
-  border:2px solid #eee;
-  border-radius:12px;
-  cursor:pointer;
-  transition:.3s;
-}
-
-.tea-card:hover{
-  border-color:var(--gold);
+background:white;
+padding:15px 20px;
+margin:10px;
+border-radius:10px;
+cursor:pointer;
 }
 
 .active-tea{
-  border-color:var(--gold);
-  background:#fff6e8;
+background:#b22222;
+color:white;
 }
 
-.strength{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  margin:20px 0;
-  flex-wrap:wrap;
+.strength-box{
+display:flex;
+justify-content:center;
+gap:15px;
+margin-bottom:20px;
 }
 
-.strength button{
-  background:#eee;
-  color:#333;
+.strength-box button{
+padding:10px 20px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#eee;
 }
 
 .active-strength{
-  background:var(--gold)!important;
-  color:white!important;
+background:#b22222 !important;
+color:white;
+}
+
+input{
+padding:10px;
+width:200px;
+border-radius:8px;
+border:1px solid #ccc;
 }
 
 .cup{
-  width:120px;
-  height:150px;
-  border:4px solid #333;
-  border-radius:0 0 40px 40px;
-  margin:0 auto 20px;
-  position:relative;
-  overflow:hidden;
+width:100px;
+height:150px;
+border:3px solid #333;
+margin:20px auto;
+position:relative;
+overflow:hidden;
+border-radius:10px;
 }
 
-.tea-fill{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:0%;
-  background:#6b3e26;
-  transition:height 1s linear;
-}
-
-#timeDisplay{
-  font-size:22px;
-  font-weight:bold;
+#teaFill{
+position:absolute;
+bottom:0;
+width:100%;
+height:0;
+background:brown;
+transition:1s;
 }
 
 footer{
-  text-align:center;
-  padding:30px;
-  background:#111;
-  color:white;
-}
-
-/* 📱 تحسين للجوال */
-@media(max-width:768px){
-
-  .navbar{
-    padding:15px 20px;
-  }
-
-  .nav-links{
-    display:none;
-  }
-
-  .hero h1{
-    font-size:24px;
-  }
-
-  .calc-card{
-    padding:25px;
-  }
-
+background:#222;
+color:white;
+padding:15px;
+margin-top:30px;
 }
