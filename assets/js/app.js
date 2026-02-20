@@ -1,73 +1,81 @@
-alert("JS شغال");
+let current = 1;
+let selectedRatio = 0;
+let teaStrength = 0;
+let sugarStrength = 0;
 
-let selectedRatio=0;
+const totalSteps = 5;
 
-let selectedRatio=0;
-let teaStrength=0;
-let sugarStrength=0;
-let timer=null;
-let totalTime=60;
+document.querySelectorAll(".tea-card").forEach(card=>{
+card.onclick=()=>{
+document.querySelectorAll(".tea-card")
+.forEach(c=>c.classList.remove("active"));
+card.classList.add("active");
+selectedRatio=parseInt(card.dataset.ratio);
+};
+});
 
-function scrollToCalc(){
- document.getElementById("calculator").scrollIntoView({behavior:"smooth"});
+document.querySelectorAll("#teaStrength button").forEach(btn=>{
+btn.onclick=()=>{
+document.querySelectorAll("#teaStrength button")
+.forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+teaStrength=parseInt(btn.dataset.val);
+};
+});
+
+document.querySelectorAll("#sugarStrength button").forEach(btn=>{
+btn.onclick=()=>{
+document.querySelectorAll("#sugarStrength button")
+.forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+sugarStrength=parseInt(btn.dataset.val);
+calculate();
+};
+});
+
+document.getElementById("nextBtn").onclick=()=>{
+if(current===1 && !selectedRatio) return alert("اختر الشاهي");
+if(current===2 && !water.value) return alert("أدخل كمية الماء");
+
+if(current===4){
+generateReview();
 }
 
-function nextStep(step){
- document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
- document.getElementById("step"+step).classList.add("active");
+if(current<totalSteps){
+changeStep(current+1);
 }
+};
 
-function selectTea(card){
- document.querySelectorAll(".tea-card").forEach(c=>c.classList.remove("active-tea"));
- card.classList.add("active-tea");
- selectedRatio=parseInt(card.dataset.ratio);
-}
+document.getElementById("backBtn").onclick=()=>{
+if(current>1) changeStep(current-1);
+};
 
-function setTeaStrength(value,btn){
- teaStrength=value;
- document.querySelectorAll("#teaStrength button").forEach(b=>b.classList.remove("active-strength"));
- btn.classList.add("active-strength");
-}
-
-function setSugarStrength(value,btn){
- sugarStrength=value;
- document.querySelectorAll("#sugarStrength button").forEach(b=>b.classList.remove("active-strength"));
- btn.classList.add("active-strength");
+function changeStep(step){
+document.getElementById("step"+current).classList.remove("active");
+current=step;
+document.getElementById("step"+current).classList.add("active");
+document.getElementById("progressBar").style.width=(current/totalSteps*100)+"%";
 }
 
 function calculate(){
- let water=parseInt(document.getElementById("water").value);
- if(!water || !selectedRatio){
-   alert("اختر نوع الشاهي وادخل كمية الماء");
-   return;
- }
+let water=parseInt(document.getElementById("water").value)||0;
+if(!selectedRatio||!water) return;
 
- let teaGrams=(water/1000)*selectedRatio + teaStrength;
- let sugarGrams=(water/1000)*30 + sugarStrength;
+let tea=((water/1000)*selectedRatio)+teaStrength;
+let sugar=((water/1000)*30)+sugarStrength;
 
- document.getElementById("result").innerHTML=
- `تحتاج ${teaGrams.toFixed(1)} جم شاهي و ${sugarGrams.toFixed(1)} جم سكر`;
+document.getElementById("result").innerText=
+`${tea.toFixed(1)} غ شاهي + ${sugar.toFixed(1)} غ سكر`;
 }
 
-function startTimer(){
- nextStep(5);
- let time=totalTime;
- const fill=document.getElementById("teaFill");
+function generateReview(){
+let water=parseInt(document.getElementById("water").value)||0;
+let tea=((water/1000)*selectedRatio)+teaStrength;
+let sugar=((water/1000)*30)+sugarStrength;
 
- timer=setInterval(()=>{
-   time--;
-
-   let percent=((totalTime-time)/totalTime)*100;
-   fill.style.height=percent+"%";
-
-   let minutes=Math.floor(time/60);
-   let seconds=time%60;
-   document.getElementById("timeDisplay").innerText=
-   minutes+":"+(seconds<10?"0"+seconds:seconds);
-
-   if(time<=0){
-     clearInterval(timer);
-   }
-
- },1000);
+document.getElementById("reviewBox").innerHTML=`
+الماء: ${water} مل <br>
+الشاهي: ${tea.toFixed(1)} غ <br>
+السكر: ${sugar.toFixed(1)} غ
+`;
 }
