@@ -1,4 +1,7 @@
+const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
+const supabaseKey = "   لsb_publishable_sIUYhUWISktMtPV4_vXP7g_8n97z7K5";
 
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 let selectedRatio = 0;
 
