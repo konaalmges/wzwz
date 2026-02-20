@@ -15,11 +15,13 @@ body{
   background:var(--light);
   color:#333;
   scroll-behavior:smooth;
+  padding-top:80px; /* 👈 عشان الناف بار الثابت */
 }
 
 /* NAVBAR */
 .navbar{
   position:fixed;
+  top:0;
   width:100%;
   padding:15px 40px;
   background:white;
@@ -59,6 +61,11 @@ body{
   text-decoration:none;
   color:#333;
   font-weight:600;
+  transition:.3s;
+}
+
+.nav-links a:hover{
+  color:var(--gold);
 }
 
 /* HERO */
@@ -94,6 +101,11 @@ body{
   font-size:16px;
   border-radius:8px;
   cursor:pointer;
+  transition:.3s;
+}
+
+.primary-btn:hover{
+  background:#b08d4b;
 }
 
 /* FEATURES */
@@ -112,6 +124,11 @@ body{
   width:250px;
   text-align:center;
   box-shadow:0 10px 30px rgba(0,0,0,.05);
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
 }
 
 /* CALCULATOR */
@@ -149,6 +166,11 @@ button{
   background:var(--gold);
   color:white;
   cursor:pointer;
+  transition:.3s;
+}
+
+button:hover{
+  background:#b08d4b;
 }
 
 .tea-types{
@@ -163,6 +185,11 @@ button{
   border:2px solid #eee;
   border-radius:12px;
   cursor:pointer;
+  transition:.3s;
+}
+
+.tea-card:hover{
+  border-color:var(--gold);
 }
 
 .active-tea{
@@ -219,3 +246,23 @@ footer{
   color:white;
 }
 
+/* 📱 تحسين للجوال */
+@media(max-width:768px){
+
+  .navbar{
+    padding:15px 20px;
+  }
+
+  .nav-links{
+    display:none;
+  }
+
+  .hero h1{
+    font-size:24px;
+  }
+
+  .calc-card{
+    padding:25px;
+  }
+
+}
