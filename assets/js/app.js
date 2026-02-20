@@ -1,3 +1,5 @@
+alert("JS شغال");
+
 let selectedRatio=0;
 
 let selectedRatio=0;
