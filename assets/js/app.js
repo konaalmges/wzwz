@@ -3,22 +3,31 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 let supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-let currentUser = null;
+/* =========================
+   تسجيل دخول مجهول مضمون
+========================= */
 
 async function login(){
-  const { data, error } = await supabaseClient.auth.signInAnonymously();
+  const { error } = await supabaseClient.auth.signInAnonymously();
+
   if(error){
     console.error("Login error:", error);
+    return;
+  }
+
+  const { data } = await supabaseClient.auth.getSession();
+
+  if(data.session){
+    console.log("Logged in ✅", data.session.user.id);
   } else {
-    currentUser = data.user;
-    console.log("Logged in ✅");
+    console.log("No session created");
   }
 }
 
 login();
 
 /* =========================
-   كودك الأصلي (بدون حذف)
+   كودك الأصلي
 ========================= */
 
 let currentStep = 1;
@@ -74,12 +83,19 @@ document.getElementById("water")
   .addEventListener("input",calculate);
 
 /* =========================
-   حفظ النتيجة عند بدء الخدرة
+   حفظ النتيجة
 ========================= */
 
 async function saveResult(){
 
-  if(!currentUser) return;
+  const { data } = await supabaseClient.auth.getSession();
+
+  if(!data.session){
+    console.log("Session not ready");
+    return;
+  }
+
+  const user = data.session.user;
 
   const teaRatio = parseFloat(document.getElementById("teaType").value);
   const water = parseFloat(document.getElementById("water").value);
@@ -91,7 +107,7 @@ async function saveResult(){
     .from("results")
     .insert([
       {
-        user_id: currentUser.id,
+        user_id: user.id,
         tea: Number(finalWeight),
         sugar: 0
       }
