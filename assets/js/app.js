@@ -1,10 +1,10 @@
 const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15dGtiY2tmd293ZmlzbWliaW55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1Mjg2MjksImV4cCI6MjA4NzEwNDYyOX0.P_Yg_9J8iC_Ot_Scff93vKPqS5o23fXgj2qWKalHK94";
+const supabaseKey = "YOUR_ANON_KEY";
 
 let supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 /* =========================
-   تسجيل دخول مجهول مضمون
+   تسجيل دخول مجهول
 ========================= */
 
 async function login(){
@@ -19,17 +19,14 @@ async function login(){
   const { data } = await supabaseClient.auth.getSession();
 
   if(data.session){
-    alert("تم تسجيل الدخول ✅");
     console.log("Logged in:", data.session.user.id);
-  } else {
-    alert("No session created ❌");
   }
 }
 
 login();
 
 /* =========================
-   كودك الأصلي
+   النظام الأساسي
 ========================= */
 
 let currentStep = 1;
@@ -70,12 +67,19 @@ function setStrength(mod,btn){
 }
 
 function calculate(){
+
   const teaRatio = parseFloat(document.getElementById("teaType").value);
   const water = parseFloat(document.getElementById("water").value);
-  if(!water) return;
+
+  if(!teaRatio || !water || water <= 0){
+    document.getElementById("result").innerText = "";
+    return;
+  }
 
   let baseWeight = (water/1000)*teaRatio;
   let finalWeight = baseWeight + strengthModifier;
+
+  if(finalWeight < 0) finalWeight = 0;
 
   document.getElementById("result").innerText =
     "النتيجة: "+finalWeight.toFixed(1)+" غرام";
@@ -85,7 +89,7 @@ document.getElementById("water")
   .addEventListener("input",calculate);
 
 /* =========================
-   حفظ النتيجة
+   حفظ النتيجة (متوافق مع الداتابيس الجديدة)
 ========================= */
 
 async function saveResult(){
@@ -94,7 +98,7 @@ async function saveResult(){
 
   if(!data.session){
     alert("Session not ready ❌");
-    return;
+    return false;
   }
 
   const user = data.session.user;
@@ -102,43 +106,61 @@ async function saveResult(){
   const teaRatio = parseFloat(document.getElementById("teaType").value);
   const water = parseFloat(document.getElementById("water").value);
 
+  if(!teaRatio || !water || water <= 0){
+    alert("لا يمكن الحفظ بدون بيانات صحيحة");
+    return false;
+  }
+
   let baseWeight = (water/1000)*teaRatio;
   let finalWeight = baseWeight + strengthModifier;
+
+  if(finalWeight < 0) finalWeight = 0;
 
   const { error } = await supabaseClient
     .from("results")
     .insert([
       {
         user_id: user.id,
-        tea: Number(finalWeight),
-        sugar: 0
+        brand_id: null,
+        water_liter: water / 1000,
+        tea_grams: Number(finalWeight),
+        sugar_grams: 0
       }
     ]);
 
   if(error){
     alert("Insert error ❌\n\n" + JSON.stringify(error, null, 2));
     console.error("Insert error:", error);
-  } else {
-    alert("تم الحفظ في الداتابيس ✅🔥");
-    console.log("Saved successfully");
+    return false;
   }
+
+  console.log("Saved successfully");
+  return true;
 }
 
 /* =========================
    المؤقت
 ========================= */
 
-function startTimer(){
+async function startTimer(){
 
   if(timerRunning) return;
 
+  const teaRatio = parseFloat(document.getElementById("teaType").value);
   const water = parseFloat(document.getElementById("water").value);
-  if(!water){
+
+  if(!teaRatio){
+    alert("اختر نوع الشاهي أولاً");
+    return;
+  }
+
+  if(!water || water <= 0){
     alert("احسب الكمية أولاً");
     return;
   }
 
-  saveResult();
+  const saved = await saveResult();
+  if(!saved) return;
 
   timerRunning=true;
 
@@ -146,10 +168,12 @@ function startTimer(){
 
   let total = 22*60;
   let remaining = total;
+
   const display = document.getElementById("timeDisplay");
   const fill = document.getElementById("teaFill");
 
   const interval = setInterval(()=>{
+
     remaining--;
 
     let m=Math.floor(remaining/60);
@@ -167,6 +191,7 @@ function startTimer(){
       if(navigator.vibrate) navigator.vibrate(500);
       timerRunning=false;
     }
+
   },1000);
 }
 
