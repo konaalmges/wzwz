@@ -1,9 +1,12 @@
 const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15dGtiY2tmd293ZmlzbWliaW55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1Mjg2MjksImV4cCI6MjA4NzEwNDYyOX0.P_Yg_9J8iC_Ot_Scff93vKPqS5o23fXgj2qWKalHK94";
-let supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+let supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
 let currentUser = null;
+
 async function login(){
-  const { data, error } = await supabase.auth.signInAnonymously();
+  const { data, error } = await supabaseClient.auth.signInAnonymously();
   if(error){
     console.error("Login error:", error);
   } else {
@@ -24,7 +27,6 @@ let timerRunning = false;
 
 function nextStep(step){
 
-  // منع الانتقال من اختيار النوع لو ما اختار
   if(step === 2){
     const teaType = document.getElementById("teaType").value;
     if(!teaType){
@@ -33,7 +35,6 @@ function nextStep(step){
     }
   }
 
-  // منع الانتقال من الماء لو فاضي
   if(step === 3){
     const water = parseFloat(document.getElementById("water").value);
     if(!water || water <= 0){
@@ -86,13 +87,13 @@ async function saveResult(){
   let baseWeight = (water/1000)*teaRatio;
   let finalWeight = baseWeight + strengthModifier;
 
-  const { error } = await supabase
+  const { error } = await supabaseClient
     .from("results")
     .insert([
       {
         user_id: currentUser.id,
         tea: Number(finalWeight),
-        sugar: 0   // حالياً ما عندك سكر في الواجهة
+        sugar: 0
       }
     ]);
 
@@ -117,7 +118,6 @@ function startTimer(){
     return;
   }
 
-  // نحفظ أول ما يبدأ
   saveResult();
 
   timerRunning=true;
