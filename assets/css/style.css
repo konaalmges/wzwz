@@ -2,14 +2,19 @@ body{
   margin:0;
   font-family:'Cairo',sans-serif;
   background:#000;
-  color:white;
+  color:#fff;
   overflow:hidden;
 }
 
-/* Screens */
-.screen{display:none;height:100vh;position:relative;}
-.screen.active{display:block;animation:fade 1s ease;}
-@keyframes fade{from{opacity:0}to{opacity:1}}
+.scene{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity .8s;
+  padding:40px;
+  overflow:auto;
+}
+.scene.active{opacity:1;}
 
 .center{
   position:absolute;
@@ -19,113 +24,46 @@ body{
   text-align:center;
 }
 
-/* Hero */
-.parallax{
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at center,rgba(212,175,55,.2),transparent 60%),
-    linear-gradient(to bottom,#1a1a1a,#000);
-  animation:slowZoom 20s infinite alternate;
-}
-@keyframes slowZoom{
-  from{transform:scale(1)}
-  to{transform:scale(1.1)}
+.logo{
+  font-size:70px;
+  color:#d4af37;
+  text-shadow:0 0 30px rgba(212,175,55,.7);
 }
 
-.vignette{
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle,transparent 60%,rgba(0,0,0,.8));
-}
-
-.logo{font-size:70px;color:#d4af37;}
-.glow-text{text-shadow:0 0 20px rgba(212,175,55,.7);}
-
-.gold-btn{
+.btn-gold{
   background:linear-gradient(135deg,#b8860b,#d4af37);
   border:none;
-  padding:14px 28px;
-  border-radius:40px;
+  padding:10px 20px;
+  border-radius:25px;
   cursor:pointer;
-  box-shadow:0 0 30px rgba(212,175,55,.4);
-}
-.gold-btn.full{width:100%}
-.gold-btn.small{padding:10px 18px;margin:10px}
-
-/* Ritual Scene */
-.ritual-wrap{
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  height:100%;
 }
 
-.scene{position:relative;width:400px;height:300px;}
-
-.teapot{position:absolute;top:0;left:50px;width:300px}
-
-.pour-stream{
-  position:absolute;
-  top:70px;
-  left:190px;
-  width:12px;
-  height:0;
-  background:linear-gradient(#d28b36,#6b3e17);
-  border-radius:6px;
-  animation:pour 3s infinite;
-}
-@keyframes pour{
-  0%{height:0;opacity:0}
-  50%{height:140px;opacity:1}
-  100%{height:0;opacity:0}
-}
-
-.cup-wrap{position:absolute;bottom:0;left:100px;}
-
-.cup{width:200px}
-
-#teaLiquid{
-  transition:height 3s ease;
-}
-
-.reflection{
-  position:absolute;
-  bottom:-15px;
-  left:40px;
-  width:120px;
-  height:20px;
-  background:radial-gradient(ellipse,rgba(212,175,55,.3),transparent);
-  filter:blur(8px);
-}
-
-/* Steam */
-.steam{
-  position:absolute;
-  width:12px;
-  height:60px;
-  background:white;
-  opacity:.15;
-  border-radius:50%;
-  animation:steam 5s infinite;
-}
-.s1{left:80px;top:-20px}
-.s2{left:100px;top:-30px;animation-delay:1s}
-.s3{left:120px;top:-20px;animation-delay:2s}
-
-@keyframes steam{
-  from{transform:translateY(0);opacity:.2}
-  to{transform:translateY(-80px);opacity:0}
-}
-
-/* Timer */
-.circle-wrap{position:relative;width:260px;margin:auto}
-#timerText{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:45px;
+.btn-outline{
+  border:1px solid #d4af37;
+  background:transparent;
   color:#d4af37;
-  text-shadow:0 0 20px rgba(212,175,55,.7);
+  padding:10px 20px;
+  border-radius:25px;
+}
+
+input,select{
+  width:100%;
+  padding:8px;
+  margin-bottom:10px;
+  background:#111;
+  border:1px solid #333;
+  color:#fff;
+}
+
+canvas{
+  background:#111;
+  margin-top:15px;
+  border-radius:10px;
+}
+
+.article{
+  background:#111;
+  padding:10px;
+  margin:10px 0;
+  border-left:3px solid #d4af37;
 }
