@@ -1,14 +1,29 @@
 const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
-const supabaseKey = "YOUR_ANON_KEY_HERE";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15dGtiY2tmd293ZmlzbWliaW55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1Mjg2MjksImV4cCI6MjA4NzEwNDYyOX0.P_Yg_9J8iC_Ot_Scff93vKPqS5o23fXgj2qWKalHK94";
 
 let supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 /* =========================
-   تسجيل دخول مجهول بصمت
+   تسجيل دخول مجهول مضمون
 ========================= */
 
 async function login(){
-  await supabaseClient.auth.signInAnonymously();
+
+  const { error } = await supabaseClient.auth.signInAnonymously();
+
+  if(error){
+    alert("Login error ❌\n\n" + JSON.stringify(error, null, 2));
+    return;
+  }
+
+  const { data } = await supabaseClient.auth.getSession();
+
+  if(data.session){
+    alert("تم تسجيل الدخول ✅");
+    console.log("Logged in:", data.session.user.id);
+  } else {
+    alert("No session created ❌");
+  }
 }
 
 login();
@@ -25,12 +40,18 @@ function nextStep(step){
 
   if(step === 2){
     const teaType = document.getElementById("teaType").value;
-    if(!teaType) return;
+    if(!teaType){
+      alert("اختر نوع الشاهي أولاً");
+      return;
+    }
   }
 
   if(step === 3){
     const water = parseFloat(document.getElementById("water").value);
-    if(!water || water <= 0) return;
+    if(!water || water <= 0){
+      alert("أدخل كمية ماء صحيحة");
+      return;
+    }
   }
 
   document.getElementById("step"+currentStep).classList.remove("active");
@@ -64,13 +85,17 @@ document.getElementById("water")
   .addEventListener("input",calculate);
 
 /* =========================
-   حفظ النتيجة (بصمت)
+   حفظ النتيجة
 ========================= */
 
 async function saveResult(){
 
   const { data } = await supabaseClient.auth.getSession();
-  if(!data.session) return;
+
+  if(!data.session){
+    alert("Session not ready ❌");
+    return;
+  }
 
   const user = data.session.user;
 
@@ -85,16 +110,17 @@ async function saveResult(){
     .insert([
       {
         user_id: user.id,
-        tea_grams: Number(finalWeight),
-        sugar_grams: 0,
-        water_liter: water / 1000,
-        strength_level: "normal",
-        steep_time_used: 22
+        tea: Number(finalWeight),
+        sugar: 0
       }
     ]);
 
   if(error){
+    alert("Insert error ❌\n\n" + JSON.stringify(error, null, 2));
     console.error("Insert error:", error);
+  } else {
+    alert("تم الحفظ في الداتابيس ✅🔥");
+    console.log("Saved successfully");
   }
 }
 
@@ -107,7 +133,10 @@ function startTimer(){
   if(timerRunning) return;
 
   const water = parseFloat(document.getElementById("water").value);
-  if(!water) return;
+  if(!water){
+    alert("احسب الكمية أولاً");
+    return;
+  }
 
   saveResult();
 
