@@ -1,151 +1,88 @@
-const App={
-  go(id){
-    document.querySelectorAll(".scene")
-      .forEach(s=>s.classList.remove("active"))
-    document.getElementById(id).classList.add("active")
-  }
+const enterBtn=document.getElementById("enterBtn");
+const intro=document.getElementById("intro");
+const prep=document.getElementById("prep");
+const timerScreen=document.getElementById("timerScreen");
+
+enterBtn.onclick=()=>{
+intro.classList.remove("active");
+prep.classList.add("active");
+};
+
+const waterInput=document.getElementById("waterInput");
+const teaResult=document.getElementById("teaResult");
+const sugarResult=document.getElementById("sugarResult");
+
+let teaFactor=1;
+let sugarFactor=1;
+
+function calculate(){
+let water=parseFloat(waterInput.value)||1000;
+let tea=13*(water/1000)*teaFactor;
+let sugar=50*(water/1000)*sugarFactor;
+teaResult.textContent=tea.toFixed(1);
+sugarResult.textContent=sugar.toFixed(1);
 }
 
-/* ===== Calculator ===== */
+waterInput.oninput=calculate;
 
-const Calculator={
-  calculate(){
-    const ml=parseFloat(document.getElementById("waterInput").value)
-    const strength=parseFloat(document.getElementById("strengthSelect").value)
-    const liters=ml/1000
+document.querySelectorAll("#teaLevel button").forEach(btn=>{
+btn.onclick=()=>{
+document.querySelectorAll("#teaLevel button").forEach(b=>b.classList.remove("special"));
+btn.classList.add("special");
+teaFactor=parseFloat(btn.getAttribute("data"));
+calculate();
+};
+});
 
-    const sugar=(liters*50*strength).toFixed(1)
-    const tea=(liters*13*strength).toFixed(1)
+document.querySelectorAll("#sugarLevel button").forEach(btn=>{
+btn.onclick=()=>{
+document.querySelectorAll("#sugarLevel button").forEach(b=>b.classList.remove("special"));
+btn.classList.add("special");
+sugarFactor=parseFloat(btn.getAttribute("data"));
+calculate();
+};
+});
 
-    document.getElementById("resultBox").innerHTML=
-      `سكر: ${sugar} جرام <br> شاهي: ${tea} جرام`
+document.getElementById("startTimer").onclick=()=>{
+prep.classList.remove("active");
+timerScreen.classList.add("active");
+startTimer();
+};
 
-    localStorage.setItem("lastWaznah",JSON.stringify({ml,strength}))
-    TeaVisual.ripple()
-  }
+let total=22*60;
+let remaining=total;
+let interval;
+const progress=document.getElementById("progress");
+const circumference=628;
+
+function startTimer(){
+interval=setInterval(()=>{
+remaining--;
+let min=Math.floor(remaining/60);
+let sec=remaining%60;
+document.getElementById("time").textContent=`${min}:${sec<10?"0":""}${sec}`;
+let offset=circumference-(remaining/total)*circumference;
+progress.style.strokeDashoffset=offset;
+if(remaining<=0)clearInterval(interval);
+},1000);
 }
 
-/* ===== Tea Ripple ===== */
+document.getElementById("endTimer").onclick=()=>{
+clearInterval(interval);
+timerScreen.classList.remove("active");
+prep.classList.add("active");
+remaining=total;
+};
 
-const teaCanvas=document.getElementById("teaCanvas")
-const tctx=teaCanvas.getContext("2d")
-let waveOffset=0
+const sound=document.getElementById("boilSound");
+const soundBtn=document.getElementById("soundBtn");
 
-const TeaVisual={
-  draw(){
-    tctx.clearRect(0,0,300,200)
-    tctx.fillStyle="#6b3e17"
-    tctx.beginPath()
-    tctx.moveTo(0,120)
-
-    for(let x=0;x<=300;x++){
-      let y=120+Math.sin((x+waveOffset)*0.05)*5
-      tctx.lineTo(x,y)
-    }
-
-    tctx.lineTo(300,200)
-    tctx.lineTo(0,200)
-    tctx.closePath()
-    tctx.fill()
-
-    waveOffset+=1
-    requestAnimationFrame(this.draw.bind(this))
-  },
-  ripple(){
-    waveOffset+=20
-  }
+soundBtn.onclick=()=>{
+if(sound.paused){
+sound.play();
+soundBtn.textContent="🔇 ايقاف الصوت";
+}else{
+sound.pause();
+soundBtn.textContent="🔊 الصوت";
 }
-TeaVisual.draw()
-
-/* ===== Steam ===== */
-
-const steamCanvas=document.getElementById("steamCanvas")
-const sctx=steamCanvas.getContext("2d")
-let particles=[]
-
-for(let i=0;i<40;i++){
-  particles.push({
-    x:150+Math.random()*20-10,
-    y:250,
-    size:4+Math.random()*6,
-    speed:1+Math.random()
-  })
-}
-
-function drawSteam(){
-  sctx.clearRect(0,0,300,300)
-  sctx.fillStyle="rgba(255,255,255,0.15)"
-  particles.forEach(p=>{
-    sctx.beginPath()
-    sctx.arc(p.x,p.y,p.size,0,Math.PI*2)
-    sctx.fill()
-    p.y-=p.speed
-    if(p.y<0) p.y=250
-  })
-  requestAnimationFrame(drawSteam)
-}
-drawSteam()
-
-/* ===== Timer ===== */
-
-const Timer={
-  total:1320,
-  current:1320,
-  interval:null,
-  running:false,
-
-  start(){
-    this.current=this.total
-    this.running=true
-    this.update()
-    this.interval=setInterval(()=>this.tick(),1000)
-  },
-
-  tick(){
-    if(!this.running)return
-    if(this.current<=0){
-      clearInterval(this.interval)
-      return
-    }
-    this.current--
-    this.update()
-  },
-
-  update(){
-    const m=String(Math.floor(this.current/60)).padStart(2,"0")
-    const s=String(this.current%60).padStart(2,"0")
-    document.getElementById("timerText").innerText=m+":"+s
-    document.getElementById("progressRing").style.strokeDashoffset=
-      722-(this.current/this.total)*722
-  },
-
-  toggle(){ this.running=!this.running },
-
-  reset(){
-    clearInterval(this.interval)
-    this.interval=null
-    this.current=this.total
-    this.update()
-  }
-}
-
-/* ===== Tea DB ===== */
-
-const TeaDB=[
-  {name:"Lipton",country:"UK"},
-  {name:"Twinings",country:"UK"},
-  {name:"Tetley",country:"UK"},
-  {name:"Brooke Bond",country:"UK"},
-  {name:"Al-Kbous",country:"Yemen"},
-  {name:"Rabea",country:"Saudi Arabia"},
-  {name:"Ahmad Tea",country:"UK"}
-]
-
-TeaDB.forEach(t=>{
-  document.getElementById("teaCompanies").innerHTML+=`
-    <div class="article">
-      <h3>${t.name}</h3>
-      <p>${t.country}</p>
-    </div>
-  `
-})
+};
