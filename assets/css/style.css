@@ -1,69 +1,114 @@
 body{
-  margin:0;
-  font-family:'Cairo',sans-serif;
-  background:#000;
-  color:#fff;
-  overflow:hidden;
+margin:0;
+font-family:'Cairo',sans-serif;
+background:#1a120b;
+color:#fff;
 }
 
-.scene{
-  position:absolute;
-  inset:0;
-  opacity:0;
-  transition:opacity .8s;
-  padding:40px;
-  overflow:auto;
-}
-.scene.active{opacity:1;}
-
-.center{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  text-align:center;
+.screen{
+display:none;
+min-height:100vh;
+align-items:center;
+justify-content:center;
+text-align:center;
 }
 
-.logo{
-  font-size:70px;
-  color:#d4af37;
-  text-shadow:0 0 30px rgba(212,175,55,.7);
+.screen.active{
+display:flex;
 }
 
-.btn-gold{
-  background:linear-gradient(135deg,#b8860b,#d4af37);
-  border:none;
-  padding:10px 20px;
-  border-radius:25px;
-  cursor:pointer;
+#intro{
+background:url('../images/hero.jpg') center/cover no-repeat;
+position:relative;
 }
 
-.btn-outline{
-  border:1px solid #d4af37;
-  background:transparent;
-  color:#d4af37;
-  padding:10px 20px;
-  border-radius:25px;
+.overlay{
+position:absolute;
+inset:0;
+background:linear-gradient(to bottom,rgba(0,0,0,.3),rgba(0,0,0,.85));
 }
 
-input,select{
-  width:100%;
-  padding:8px;
-  margin-bottom:10px;
-  background:#111;
-  border:1px solid #333;
-  color:#fff;
+.intro-content{
+position:relative;
+z-index:2;
 }
 
-canvas{
-  background:#111;
-  margin-top:15px;
-  border-radius:10px;
+h1{
+font-size:70px;
+color:#f5c27c;
+letter-spacing:3px;
 }
 
-.article{
-  background:#111;
-  padding:10px;
-  margin:10px 0;
-  border-left:3px solid #d4af37;
+button{
+padding:12px 25px;
+border:none;
+background:#a66a2c;
+color:white;
+border-radius:6px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#d48b3f;
+}
+
+.container{
+max-width:500px;
+}
+
+.card{
+background:#2b1b12;
+padding:20px;
+margin:20px 0;
+border-radius:12px;
+box-shadow:0 0 25px rgba(0,0,0,.6);
+}
+
+.choices button{
+margin:5px;
+}
+
+.special{
+background:#f5c27c;
+color:#000;
+font-weight:bold;
+}
+
+.result{
+font-size:20px;
+margin:20px 0;
+}
+
+.timer-box{
+text-align:center;
+}
+
+.progress-ring{
+position:relative;
+margin:20px auto;
+width:220px;
+height:220px;
+}
+
+#time{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:30px;
+}
+
+.steam{
+width:60px;
+height:80px;
+background:radial-gradient(circle,rgba(255,255,255,.6),transparent 70%);
+margin:auto;
+animation:steam 3s infinite;
+}
+
+@keyframes steam{
+0%{opacity:0;transform:translateY(20px);}
+50%{opacity:1;}
+100%{opacity:0;transform:translateY(-40px);}
 }
