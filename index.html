@@ -3,89 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>وزنة</title>
+<title>وزنة | طقس الشاهي</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-<!-- ========= HERO ========= -->
-<section id="home" class="screen active">
-  <div class="parallax"></div>
-  <div class="vignette"></div>
+<!-- Ambient Layers -->
+<div class="grain"></div>
+<div class="global-vignette"></div>
+<div class="light-flicker"></div>
 
-  <div class="center intro">
-    <h1 class="logo glow-text">وزنة</h1>
-    <p class="subtitle">طقس الشاهي كما يجب أن يكون</p>
-    <button class="gold-btn" onclick="goTo('ritual')">ابدأ الطقس</button>
+<!-- ================= HERO ================= -->
+<section id="hero" class="scene active">
+  <div class="hero-parallax"></div>
+  <div class="hero-content">
+    <h1 class="logo">وزنة</h1>
+    <p class="tagline">طقس الشاهي كما يجب أن يكون</p>
+    <button class="btn-primary" onclick="Scene.go('ritual')">
+      ابدأ الطقس
+    </button>
   </div>
 </section>
 
-<!-- ========= RITUAL ========= -->
-<section id="ritual" class="screen">
-  <div class="ritual-wrap">
+<!-- ================= RITUAL ================= -->
+<section id="ritual" class="scene">
 
-    <div class="scene">
+  <div class="ritual-stage">
 
-      <!-- إبريق -->
-      <svg class="teapot" viewBox="0 0 300 200">
-        <path d="M60 120 Q150 20 240 120" stroke="#b87333" stroke-width="10" fill="none"/>
-      </svg>
+    <div class="ritual-visual">
 
-      <!-- سائل الصب -->
+      <div class="teapot-wrapper">
+        <img src="assets/svg/teapot.svg" class="teapot">
+      </div>
+
       <div class="pour-stream"></div>
 
-      <!-- كاسه -->
-      <div class="cup-wrap">
-        <svg viewBox="0 0 200 150" class="cup">
-          <rect x="40" y="60" width="120" height="70" rx="25" fill="#2b1a10"/>
-          <clipPath id="clipTea">
-            <rect x="40" y="60" width="120" height="70" rx="25"/>
-          </clipPath>
-          <rect id="teaLiquid"
-            x="40"
-            y="130"
-            width="120"
-            height="0"
-            fill="url(#teaGrad)"
-            clip-path="url(#clipTea)"
-          />
-          <defs>
-            <linearGradient id="teaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#d28b36"/>
-              <stop offset="100%" stop-color="#6b3e17"/>
-            </linearGradient>
-          </defs>
-        </svg>
-
-        <!-- انعكاس -->
+      <div class="cup-wrapper">
+        <img src="assets/svg/cup.svg" class="cup">
+        <div class="tea-fill"></div>
         <div class="reflection"></div>
 
-        <!-- بخار -->
-        <div class="steam s1"></div>
-        <div class="steam s2"></div>
-        <div class="steam s3"></div>
+        <div class="steam-layer"></div>
       </div>
 
     </div>
 
-    <div class="controls">
-      <h2>ابدأ الخدرة</h2>
-      <button class="gold-btn full" onclick="startTimer()">ابدأ 22 دقيقة</button>
+    <div class="ritual-controls">
+      <h2>الخدرة</h2>
+      <button class="btn-primary" onclick="Ritual.start()">
+        ابدأ 22 دقيقة
+      </button>
     </div>
 
   </div>
+
 </section>
 
-<!-- ========= BREW ========= -->
-<section id="brew" class="screen">
-  <div class="center">
+<!-- ================= TIMER ================= -->
+<section id="timer" class="scene">
 
-    <div class="circle-wrap">
+  <div class="timer-container">
+
+    <div class="timer-ring">
       <svg width="260" height="260">
-        <circle cx="130" cy="130" r="115" stroke="#222" stroke-width="10" fill="none"/>
-        <circle id="progress"
+        <circle cx="130" cy="130" r="115"
+          stroke="#1a1a1a"
+          stroke-width="10"
+          fill="none"/>
+
+        <circle id="progressRing"
           cx="130"
           cy="130"
           r="115"
@@ -93,23 +81,21 @@
           stroke-width="10"
           fill="none"
           stroke-dasharray="722"
-          stroke-dashoffset="0"
-        />
+          stroke-dashoffset="0"/>
       </svg>
+
       <div id="timerText">22:00</div>
     </div>
 
-    <div class="brew-buttons">
-      <button class="gold-btn small" onclick="toggleTimer()">⏯</button>
-      <button class="gold-btn small" onclick="toggleSound()">🔊</button>
+    <div class="timer-controls">
+      <button onclick="Timer.toggle()">⏯</button>
+      <button onclick="Sound.toggle()">🔊</button>
+      <button onclick="Timer.stop()">إنهاء</button>
     </div>
 
   </div>
-</section>
 
-<audio id="brewSound" loop>
-  <source src="assets/sound/brew.mp3" type="audio/mpeg">
-</audio>
+</section>
 
 <script src="assets/js/app.js"></script>
 </body>
