@@ -1,8 +1,46 @@
+/* =========================
+   Supabase Setup
+========================= */
+
+const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15dGtiY2tmd293ZmlzbWliaW55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1Mjg2MjksImV4cCI6MjA4NzEwNDYyOX0.P_Yg_9J8iC_Ot_Scff93vKPqS5o23fXgj2qWKalHK94";
+
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+let currentUser = null;
+
+async function login(){
+  const { data, error } = await supabase.auth.signInAnonymously();
+
+  if(error){
+    console.error("Login error:", error);
+  } else {
+    currentUser = data.user;
+    console.log("Logged in ✅");
+  }
+}
+
+login();
+
+/* =========================
+   App Logic (كودك الأصلي)
+========================= */
+
 let currentStep = 1;
 let strengthModifier = 0;
 let timerRunning = false;
 
 function nextStep(step){
+
+  // 🔥 منع الانتقال لو ما فيه ماء في الخطوة الأولى
+  if(step === 2){
+    const water = parseFloat(document.getElementById("water").value);
+    if(!water || water <= 0){
+      alert("أدخل كمية ماء أولاً 🚨");
+      return;
+    }
+  }
+
   document.getElementById("step"+currentStep).classList.remove("active");
   currentStep = step;
   document.getElementById("step"+currentStep).classList.add("active");
@@ -28,10 +66,45 @@ function calculate(){
 
   document.getElementById("result").innerText =
     "النتيجة: "+finalWeight.toFixed(1)+" غرام";
+
+  // 🔥 نحفظ النتيجة بعد الحساب
+  saveResult(finalWeight, strengthModifier);
 }
 
 document.getElementById("water")
   .addEventListener("input",calculate);
+
+/* =========================
+   حفظ النتيجة
+========================= */
+
+async function saveResult(teaValue, sugarValue){
+
+  if(!currentUser){
+    console.log("المستخدم غير جاهز بعد...");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("results")
+    .insert([
+      {
+        user_id: currentUser.id,
+        tea: Number(teaValue),
+        sugar: Number(sugarValue)
+      }
+    ]);
+
+  if(error){
+    console.error("Insert error:", error);
+  } else {
+    console.log("تم الحفظ ✅");
+  }
+}
+
+/* =========================
+   المؤقت (بدون تغيير)
+========================= */
 
 function startTimer(){
   if(timerRunning) return;
