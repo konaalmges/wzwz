@@ -8,19 +8,21 @@ let supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 ========================= */
 
 async function login(){
+
   const { error } = await supabaseClient.auth.signInAnonymously();
 
   if(error){
-    console.error("Login error:", error);
+    alert("Login error ❌\n\n" + JSON.stringify(error, null, 2));
     return;
   }
 
   const { data } = await supabaseClient.auth.getSession();
 
   if(data.session){
-    console.log("Logged in ✅", data.session.user.id);
+    alert("تم تسجيل الدخول ✅");
+    console.log("Logged in:", data.session.user.id);
   } else {
-    console.log("No session created");
+    alert("No session created ❌");
   }
 }
 
@@ -91,7 +93,7 @@ async function saveResult(){
   const { data } = await supabaseClient.auth.getSession();
 
   if(!data.session){
-    console.log("Session not ready");
+    alert("Session not ready ❌");
     return;
   }
 
@@ -114,9 +116,11 @@ async function saveResult(){
     ]);
 
   if(error){
+    alert("Insert error ❌\n\n" + JSON.stringify(error, null, 2));
     console.error("Insert error:", error);
   } else {
-    console.log("تم الحفظ ✅");
+    alert("تم الحفظ في الداتابيس ✅🔥");
+    console.log("Saved successfully");
   }
 }
 
