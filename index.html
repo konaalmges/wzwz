@@ -1,107 +1,80 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>وزنة | Waznah Ritual</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8">
+  <title>وزنة | مجلس الشاهي</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="grain"></div>
-<div class="vignette"></div>
-
-<!-- HERO -->
-<section id="hero" class="scene active">
-  <div class="hero-bg"></div>
-  <div class="center">
-    <h1 class="logo">وزنة</h1>
-    <p>طقس الشاهي كما يجب أن يكون</p>
-    <button class="btn-gold" onclick="App.go('ritual')">ابدأ</button>
+<!-- شاشة الدخول -->
+<section id="intro" class="screen active">
+  <div class="overlay"></div>
+  <div class="intro-content">
+    <h1>مرحباً بك في وزنة</h1>
+    <p>مجلس عشاق الشاهي… وقت الغروب</p>
+    <button id="enterBtn">ادخل المجلس</button>
   </div>
 </section>
 
-<!-- RITUAL -->
-<section id="ritual" class="scene">
+<!-- شاشة التحضير -->
+<section id="prep" class="screen">
   <div class="container">
+    <h2>اضبط وزنتك</h2>
 
-    <div class="left">
-      <h2>إعداد الوزنة</h2>
-
-      <label>الماء (مل)</label>
-      <input type="number" id="waterInput" value="1000">
-
-      <label>القوة</label>
-      <select id="strengthSelect">
-        <option value="1">خفيف</option>
-        <option value="1.2" selected>وزنة</option>
-        <option value="1.4">ثقيل</option>
+    <div class="card">
+      <h3>الماء</h3>
+      <select id="waterPreset">
+        <option value="600">600 مل</option>
+        <option value="1000" selected>1000 مل</option>
+        <option value="1500">1500 مل</option>
+        <option value="2000">2000 مل</option>
       </select>
-
-      <button class="btn-gold" onclick="Calculator.calculate()">
-        احسب
-      </button>
-
-      <div id="resultBox"></div>
-
-      <button class="btn-outline"
-        onclick="Timer.start(); App.go('timer')">
-        ابدأ الخدرة 22 دقيقة
-      </button>
+      <input type="number" id="customWater" placeholder="او اكتب ملي بنفسك">
     </div>
 
-    <div class="right">
-      <canvas id="teaCanvas" width="300" height="200"></canvas>
-      <canvas id="steamCanvas" width="300" height="300"></canvas>
+    <div class="card">
+      <h3>الشاهي</h3>
+      <div class="choices" id="teaLevel">
+        <button data-level="light">خفيف</button>
+        <button class="active" data-level="normal">وزنة</button>
+        <button data-level="strong">ثقيل</button>
+      </div>
     </div>
 
+    <div class="card">
+      <h3>السكر</h3>
+      <div class="choices" id="sugarLevel">
+        <button data-level="light">خفيف</button>
+        <button class="active" data-level="normal">وزنة</button>
+        <button data-level="strong">ثقيل</button>
+      </div>
+    </div>
+
+    <div class="result">
+      <p>الشاهي: <span id="teaResult">13</span> غرام</p>
+      <p>السكر: <span id="sugarResult">50</span> غرام</p>
+    </div>
+
+    <button id="startTimer">ابدأ الخدرة (22 دقيقة)</button>
   </div>
 </section>
 
-<!-- TIMER -->
-<section id="timer" class="scene">
-  <div class="center">
-
-    <div class="ring">
-      <svg width="260" height="260">
-        <circle cx="130" cy="130" r="115"
-          stroke="#222" stroke-width="10" fill="none"/>
-        <circle id="progressRing"
-          cx="130" cy="130" r="115"
-          stroke="#d4af37" stroke-width="10"
-          fill="none"
-          stroke-dasharray="722"
-          stroke-dashoffset="0"/>
-      </svg>
-      <div id="timerText">22:00</div>
+<!-- شاشة المؤقت -->
+<section id="timerScreen" class="screen">
+  <div class="timer-container">
+    <div class="teapot">
+      <img src="assets/svg/teapot.svg">
+      <div class="steam"></div>
     </div>
 
-    <div class="timer-buttons">
-      <button onclick="Timer.toggle()">⏯</button>
-      <button onclick="Timer.reset()">إعادة</button>
-      <button onclick="App.go('knowledge')">الموسوعة</button>
+    <div class="timer-circle">
+      <span id="time">22:00</span>
     </div>
 
-  </div>
-</section>
-
-<!-- KNOWLEDGE -->
-<section id="knowledge" class="scene">
-  <div class="knowledge">
-
-    <h2>Tea Companies</h2>
-    <div id="teaCompanies"></div>
-
-    <h2>معلومات الشاهي</h2>
-    <div class="article">
-      لكل لتر:
-      50 جرام سكر
-      13 جرام شاهي
-    </div>
-
-    <button class="btn-outline" onclick="App.go('hero')">رجوع</button>
-
+    <button id="endTimer">انهاء</button>
+    <button id="toggleSound">تشغيل الصوت</button>
   </div>
 </section>
 
