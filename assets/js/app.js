@@ -1,5 +1,5 @@
 const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
-const supabaseKey = "YOUR_ANON_KEY";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15dGtiY2tmd293ZmlzbWliaW55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1Mjg2MjksImV4cCI6MjA4NzEwNDYyOX0.P_Yg_9J8iC_Ot_Scff93vKPqS5o23fXgj2qWKalHK94";
 
 let supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -8,6 +8,13 @@ let supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 ========================= */
 
 async function login(){
+
+  const { data: existing } = await supabaseClient.auth.getSession();
+
+  if(existing.session){
+    console.log("Already logged:", existing.session.user.id);
+    return;
+  }
 
   const { error } = await supabaseClient.auth.signInAnonymously();
 
@@ -89,7 +96,7 @@ document.getElementById("water")
   .addEventListener("input",calculate);
 
 /* =========================
-   حفظ النتيجة (متوافق مع الداتابيس الجديدة)
+   حفظ النتيجة
 ========================= */
 
 async function saveResult(){
