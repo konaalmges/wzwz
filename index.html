@@ -3,98 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>وزنة | طقس الشاهي</title>
-
+<title>وزنة | Waznah Ritual</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-<!-- Ambient Layers -->
 <div class="grain"></div>
-<div class="global-vignette"></div>
-<div class="light-flicker"></div>
+<div class="vignette"></div>
 
-<!-- ================= HERO ================= -->
+<!-- HERO -->
 <section id="hero" class="scene active">
-  <div class="hero-parallax"></div>
-  <div class="hero-content">
+  <div class="hero-bg"></div>
+  <div class="center">
     <h1 class="logo">وزنة</h1>
-    <p class="tagline">طقس الشاهي كما يجب أن يكون</p>
-    <button class="btn-primary" onclick="Scene.go('ritual')">
-      ابدأ الطقس
-    </button>
+    <p>طقس الشاهي كما يجب أن يكون</p>
+    <button class="btn-gold" onclick="App.go('ritual')">ابدأ</button>
   </div>
 </section>
 
-<!-- ================= RITUAL ================= -->
+<!-- RITUAL -->
 <section id="ritual" class="scene">
+  <div class="container">
 
-  <div class="ritual-stage">
+    <div class="left">
+      <h2>إعداد الوزنة</h2>
 
-    <div class="ritual-visual">
+      <label>الماء (مل)</label>
+      <input type="number" id="waterInput" value="1000">
 
-      <div class="teapot-wrapper">
-        <img src="assets/svg/teapot.svg" class="teapot">
-      </div>
+      <label>القوة</label>
+      <select id="strengthSelect">
+        <option value="1">خفيف</option>
+        <option value="1.2" selected>وزنة</option>
+        <option value="1.4">ثقيل</option>
+      </select>
 
-      <div class="pour-stream"></div>
+      <button class="btn-gold" onclick="Calculator.calculate()">
+        احسب
+      </button>
 
-      <div class="cup-wrapper">
-        <img src="assets/svg/cup.svg" class="cup">
-        <div class="tea-fill"></div>
-        <div class="reflection"></div>
+      <div id="resultBox"></div>
 
-        <div class="steam-layer"></div>
-      </div>
-
-    </div>
-
-    <div class="ritual-controls">
-      <h2>الخدرة</h2>
-      <button class="btn-primary" onclick="Ritual.start()">
-        ابدأ 22 دقيقة
+      <button class="btn-outline"
+        onclick="Timer.start(); App.go('timer')">
+        ابدأ الخدرة 22 دقيقة
       </button>
     </div>
 
-  </div>
+    <div class="right">
+      <canvas id="teaCanvas" width="300" height="200"></canvas>
+      <canvas id="steamCanvas" width="300" height="300"></canvas>
+    </div>
 
+  </div>
 </section>
 
-<!-- ================= TIMER ================= -->
+<!-- TIMER -->
 <section id="timer" class="scene">
+  <div class="center">
 
-  <div class="timer-container">
-
-    <div class="timer-ring">
+    <div class="ring">
       <svg width="260" height="260">
         <circle cx="130" cy="130" r="115"
-          stroke="#1a1a1a"
-          stroke-width="10"
-          fill="none"/>
-
+          stroke="#222" stroke-width="10" fill="none"/>
         <circle id="progressRing"
-          cx="130"
-          cy="130"
-          r="115"
-          stroke="#d4af37"
-          stroke-width="10"
+          cx="130" cy="130" r="115"
+          stroke="#d4af37" stroke-width="10"
           fill="none"
           stroke-dasharray="722"
           stroke-dashoffset="0"/>
       </svg>
-
       <div id="timerText">22:00</div>
     </div>
 
-    <div class="timer-controls">
+    <div class="timer-buttons">
       <button onclick="Timer.toggle()">⏯</button>
-      <button onclick="Sound.toggle()">🔊</button>
-      <button onclick="Timer.stop()">إنهاء</button>
+      <button onclick="Timer.reset()">إعادة</button>
+      <button onclick="App.go('knowledge')">الموسوعة</button>
     </div>
 
   </div>
+</section>
 
+<!-- KNOWLEDGE -->
+<section id="knowledge" class="scene">
+  <div class="knowledge">
+
+    <h2>Tea Companies</h2>
+    <div id="teaCompanies"></div>
+
+    <h2>معلومات الشاهي</h2>
+    <div class="article">
+      لكل لتر:
+      50 جرام سكر
+      13 جرام شاهي
+    </div>
+
+    <button class="btn-outline" onclick="App.go('hero')">رجوع</button>
+
+  </div>
 </section>
 
 <script src="assets/js/app.js"></script>
