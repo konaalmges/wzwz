@@ -63,7 +63,23 @@
 <button class="active-strength" onclick="setStrength(0,this)">⚖ وزنه</button>
 <button onclick="setStrength(2,this)">ثقيل</button>
 </div>
-<h3 id="result">النتيجة: 0 غرام</h3>
+
+<h2>اختر مستوى السكر</h2>
+<div class="sugar">
+<button onclick="setSugar(0,this)">بدون</button>
+<button onclick="setSugar(40,this)">خفيف</button>
+<button class="active-strength" onclick="setSugar(50,this)">⚖ وزنه</button>
+<button onclick="setSugar(60,this)">ثقيل</button>
+</div>
+
+<div class="result-card">
+  <h3>نتيجة التحضير</h3>
+  <div id="result">
+    ☕ الشاهي: 0 غرام<br>
+    🍬 السكر: 0 غرام
+  </div>
+</div>
+
 <button class="primary-btn" onclick="startTimer()">ابدأ الخدرة</button>
 </div>
 
@@ -85,6 +101,7 @@
 <footer>
 WAZNAH © 2026 — دقة في كل كاسة.
 </footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/app.js"></script>
 </body>
