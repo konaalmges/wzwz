@@ -11,7 +11,6 @@ let currentUser = null;
 
 async function login(){
   const { data, error } = await supabase.auth.signInAnonymously();
-
   if(error){
     console.error("Login error:", error);
   } else {
@@ -23,7 +22,7 @@ async function login(){
 login();
 
 /* =========================
-   App Logic (كودك الأصلي)
+   كودك الأصلي (بدون حذف)
 ========================= */
 
 let currentStep = 1;
@@ -32,11 +31,20 @@ let timerRunning = false;
 
 function nextStep(step){
 
-  // 🔥 منع الانتقال لو ما فيه ماء في الخطوة الأولى
+  // منع الانتقال من اختيار النوع لو ما اختار
   if(step === 2){
+    const teaType = document.getElementById("teaType").value;
+    if(!teaType){
+      alert("اختر نوع الشاهي أولاً");
+      return;
+    }
+  }
+
+  // منع الانتقال من الماء لو فاضي
+  if(step === 3){
     const water = parseFloat(document.getElementById("water").value);
     if(!water || water <= 0){
-      alert("أدخل كمية ماء أولاً 🚨");
+      alert("أدخل كمية ماء صحيحة");
       return;
     }
   }
@@ -66,32 +74,32 @@ function calculate(){
 
   document.getElementById("result").innerText =
     "النتيجة: "+finalWeight.toFixed(1)+" غرام";
-
-  // 🔥 نحفظ النتيجة بعد الحساب
-  saveResult(finalWeight, strengthModifier);
 }
 
 document.getElementById("water")
   .addEventListener("input",calculate);
 
 /* =========================
-   حفظ النتيجة
+   حفظ النتيجة عند بدء الخدرة
 ========================= */
 
-async function saveResult(teaValue, sugarValue){
+async function saveResult(){
 
-  if(!currentUser){
-    console.log("المستخدم غير جاهز بعد...");
-    return;
-  }
+  if(!currentUser) return;
+
+  const teaRatio = parseFloat(document.getElementById("teaType").value);
+  const water = parseFloat(document.getElementById("water").value);
+
+  let baseWeight = (water/1000)*teaRatio;
+  let finalWeight = baseWeight + strengthModifier;
 
   const { error } = await supabase
     .from("results")
     .insert([
       {
         user_id: currentUser.id,
-        tea: Number(teaValue),
-        sugar: Number(sugarValue)
+        tea: Number(finalWeight),
+        sugar: 0   // حالياً ما عندك سكر في الواجهة
       }
     ]);
 
@@ -103,11 +111,22 @@ async function saveResult(teaValue, sugarValue){
 }
 
 /* =========================
-   المؤقت (بدون تغيير)
+   المؤقت
 ========================= */
 
 function startTimer(){
+
   if(timerRunning) return;
+
+  const water = parseFloat(document.getElementById("water").value);
+  if(!water){
+    alert("احسب الكمية أولاً");
+    return;
+  }
+
+  // نحفظ أول ما يبدأ
+  saveResult();
+
   timerRunning=true;
 
   nextStep(4);
