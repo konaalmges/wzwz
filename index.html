@@ -1,90 +1,109 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>وزنة</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>وزنة</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-<!-- ================= HOME ================= -->
+<!-- ========= HERO ========= -->
 <section id="home" class="screen active">
-  <div class="overlay"></div>
+  <div class="parallax"></div>
+  <div class="vignette"></div>
 
-  <div class="center">
-    <div class="cup-wrapper">
-      <img src="assets/svg/cup.svg" class="cup">
-      <div class="steam s1"></div>
-      <div class="steam s2"></div>
-      <div class="steam s3"></div>
-    </div>
-
-    <h1 class="logo">وزنة</h1>
-    <p class="subtitle">اضبطها على مزاجك</p>
-    <button class="glow-btn" onclick="goTo('ritual')">ابدأ الطقس</button>
+  <div class="center intro">
+    <h1 class="logo glow-text">وزنة</h1>
+    <p class="subtitle">طقس الشاهي كما يجب أن يكون</p>
+    <button class="gold-btn" onclick="goTo('ritual')">ابدأ الطقس</button>
   </div>
 </section>
 
-<!-- ================= RITUAL ================= -->
+<!-- ========= RITUAL ========= -->
 <section id="ritual" class="screen">
-  <div class="card">
-    <h2>اختر مقاديرك</h2>
+  <div class="ritual-wrap">
 
-    <div class="group">
-      <label>كمية الماء (مل)</label>
-      <select id="water">
-        <option value="250">250</option>
-        <option value="350" selected>350</option>
-        <option value="500">500</option>
-        <option value="750">750</option>
-      </select>
+    <div class="scene">
+
+      <!-- إبريق -->
+      <svg class="teapot" viewBox="0 0 300 200">
+        <path d="M60 120 Q150 20 240 120" stroke="#b87333" stroke-width="10" fill="none"/>
+      </svg>
+
+      <!-- سائل الصب -->
+      <div class="pour-stream"></div>
+
+      <!-- كاسه -->
+      <div class="cup-wrap">
+        <svg viewBox="0 0 200 150" class="cup">
+          <rect x="40" y="60" width="120" height="70" rx="25" fill="#2b1a10"/>
+          <clipPath id="clipTea">
+            <rect x="40" y="60" width="120" height="70" rx="25"/>
+          </clipPath>
+          <rect id="teaLiquid"
+            x="40"
+            y="130"
+            width="120"
+            height="0"
+            fill="url(#teaGrad)"
+            clip-path="url(#clipTea)"
+          />
+          <defs>
+            <linearGradient id="teaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#d28b36"/>
+              <stop offset="100%" stop-color="#6b3e17"/>
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <!-- انعكاس -->
+        <div class="reflection"></div>
+
+        <!-- بخار -->
+        <div class="steam s1"></div>
+        <div class="steam s2"></div>
+        <div class="steam s3"></div>
+      </div>
+
     </div>
-
-    <div class="group">
-      <label>السكر</label>
-      <select id="sugar">
-        <option value="قليل">قليل</option>
-        <option value="وزنة" selected>وزنة</option>
-        <option value="ثقيل">ثقيل</option>
-      </select>
-      <span id="sugarResult"></span>
-    </div>
-
-    <div class="group">
-      <label>الشاهي</label>
-      <select id="tea">
-        <option value="خفيف">خفيف</option>
-        <option value="وزنة" selected>وزنة</option>
-        <option value="ثقيل">ثقيل</option>
-      </select>
-      <span id="teaResult"></span>
-    </div>
-
-    <button class="glow-btn full" onclick="startTimer()">ابدأ الخدرة (22 دقيقة)</button>
-  </div>
-</section>
-
-<!-- ================= BREW ================= -->
-<section id="brew" class="screen">
-  <div class="center">
-    <h2 id="timer">22:00</h2>
 
     <div class="controls">
-      <button onclick="toggleSound()">تشغيل / إيقاف الصوت</button>
-      <button onclick="toggleTimer()">إيقاف / تشغيل المؤقت</button>
-      <button class="danger" onclick="finishEarly()">إنهاء</button>
+      <h2>ابدأ الخدرة</h2>
+      <button class="gold-btn full" onclick="startTimer()">ابدأ 22 دقيقة</button>
     </div>
+
   </div>
 </section>
 
-<!-- ================= DONE ================= -->
-<section id="done" class="screen">
+<!-- ========= BREW ========= -->
+<section id="brew" class="screen">
   <div class="center">
-    <h2>اكتملت الخدرة ☕</h2>
-    <button onclick="goTo('home')">طقس جديد</button>
+
+    <div class="circle-wrap">
+      <svg width="260" height="260">
+        <circle cx="130" cy="130" r="115" stroke="#222" stroke-width="10" fill="none"/>
+        <circle id="progress"
+          cx="130"
+          cy="130"
+          r="115"
+          stroke="#d4af37"
+          stroke-width="10"
+          fill="none"
+          stroke-dasharray="722"
+          stroke-dashoffset="0"
+        />
+      </svg>
+      <div id="timerText">22:00</div>
+    </div>
+
+    <div class="brew-buttons">
+      <button class="gold-btn small" onclick="toggleTimer()">⏯</button>
+      <button class="gold-btn small" onclick="toggleSound()">🔊</button>
+    </div>
+
   </div>
 </section>
 
