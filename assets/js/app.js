@@ -1,81 +1,71 @@
-let current = 1;
-let selectedRatio = 0;
-let teaStrength = 0;
-let sugarStrength = 0;
+let currentStep = 1;
+let strengthModifier = 0;
+let timerRunning = false;
 
-const totalSteps = 5;
-
-document.querySelectorAll(".tea-card").forEach(card=>{
-card.onclick=()=>{
-document.querySelectorAll(".tea-card")
-.forEach(c=>c.classList.remove("active"));
-card.classList.add("active");
-selectedRatio=parseInt(card.dataset.ratio);
-};
-});
-
-document.querySelectorAll("#teaStrength button").forEach(btn=>{
-btn.onclick=()=>{
-document.querySelectorAll("#teaStrength button")
-.forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
-teaStrength=parseInt(btn.dataset.val);
-};
-});
-
-document.querySelectorAll("#sugarStrength button").forEach(btn=>{
-btn.onclick=()=>{
-document.querySelectorAll("#sugarStrength button")
-.forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
-sugarStrength=parseInt(btn.dataset.val);
-calculate();
-};
-});
-
-document.getElementById("nextBtn").onclick=()=>{
-if(current===1 && !selectedRatio) return alert("اختر الشاهي");
-if(current===2 && !water.value) return alert("أدخل كمية الماء");
-
-if(current===4){
-generateReview();
+function nextStep(step){
+  document.getElementById("step"+currentStep).classList.remove("active");
+  currentStep = step;
+  document.getElementById("step"+currentStep).classList.add("active");
 }
 
-if(current<totalSteps){
-changeStep(current+1);
-}
-};
+function setStrength(mod,btn){
+  strengthModifier = mod;
 
-document.getElementById("backBtn").onclick=()=>{
-if(current>1) changeStep(current-1);
-};
+  document.querySelectorAll(".strength button")
+    .forEach(b=>b.classList.remove("active-strength"));
 
-function changeStep(step){
-document.getElementById("step"+current).classList.remove("active");
-current=step;
-document.getElementById("step"+current).classList.add("active");
-document.getElementById("progressBar").style.width=(current/totalSteps*100)+"%";
+  btn.classList.add("active-strength");
+  calculate();
 }
 
 function calculate(){
-let water=parseInt(document.getElementById("water").value)||0;
-if(!selectedRatio||!water) return;
+  const teaRatio = parseFloat(document.getElementById("teaType").value);
+  const water = parseFloat(document.getElementById("water").value);
+  if(!water) return;
 
-let tea=((water/1000)*selectedRatio)+teaStrength;
-let sugar=((water/1000)*30)+sugarStrength;
+  let baseWeight = (water/1000)*teaRatio;
+  let finalWeight = baseWeight + strengthModifier;
 
-document.getElementById("result").innerText=
-`${tea.toFixed(1)} غ شاهي + ${sugar.toFixed(1)} غ سكر`;
+  document.getElementById("result").innerText =
+    "النتيجة: "+finalWeight.toFixed(1)+" غرام";
 }
 
-function generateReview(){
-let water=parseInt(document.getElementById("water").value)||0;
-let tea=((water/1000)*selectedRatio)+teaStrength;
-let sugar=((water/1000)*30)+sugarStrength;
+document.getElementById("water")
+  .addEventListener("input",calculate);
 
-document.getElementById("reviewBox").innerHTML=`
-الماء: ${water} مل <br>
-الشاهي: ${tea.toFixed(1)} غ <br>
-السكر: ${sugar.toFixed(1)} غ
-`;
+function startTimer(){
+  if(timerRunning) return;
+  timerRunning=true;
+
+  nextStep(4);
+
+  let total = 22*60;
+  let remaining = total;
+  const display = document.getElementById("timeDisplay");
+  const fill = document.getElementById("teaFill");
+
+  const interval = setInterval(()=>{
+    remaining--;
+
+    let m=Math.floor(remaining/60);
+    let s=remaining%60;
+
+    display.textContent=
+      String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+
+    let progress=((total-remaining)/total)*100;
+    fill.style.height=progress+"%";
+
+    if(remaining<=0){
+      clearInterval(interval);
+      display.textContent="جاهز ☕";
+      if(navigator.vibrate) navigator.vibrate(500);
+      timerRunning=false;
+    }
+  },1000);
+}
+
+function scrollToCalc(){
+  document.getElementById("calculator")
+  .scrollIntoView({behavior:"smooth"});
 }
