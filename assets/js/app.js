@@ -1,208 +1,71 @@
-const supabaseUrl = "https://mytkbckfwowfismibiny.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15dGtiY2tmd293ZmlzbWliaW55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1Mjg2MjksImV4cCI6MjA4NzEwNDYyOX0.P_Yg_9J8iC_Ot_Scff93vKPqS5o23fXgj2qWKalHK94";
+let seconds = 1320
+let interval = null
+let running = true
 
-let supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-/* =========================
-   تسجيل دخول مجهول
-========================= */
-
-async function login(){
-
-  const { data: existing } = await supabaseClient.auth.getSession();
-
-  if(existing.session){
-    console.log("Already logged:", existing.session.user.id);
-    return;
-  }
-
-  const { error } = await supabaseClient.auth.signInAnonymously();
-
-  if(error){
-    alert("Login error ❌\n\n" + JSON.stringify(error, null, 2));
-    return;
-  }
-
-  const { data } = await supabaseClient.auth.getSession();
-
-  if(data.session){
-    console.log("Logged in:", data.session.user.id);
-  }
+function goTo(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"))
+  document.getElementById(id).classList.add("active")
 }
 
-login();
+function calculate() {
+  const water = parseInt(document.getElementById("water").value)
+  const sugarLevel = document.getElementById("sugar").value
+  const teaLevel = document.getElementById("tea").value
 
-/* =========================
-   النظام الأساسي
-========================= */
+  let sugar = (water / 1000) * 50
+  let tea = (water / 1000) * 13
 
-let currentStep = 1;
-let strengthModifier = 0;
-let timerRunning = false;
+  if (sugarLevel === "قليل") sugar *= 0.7
+  if (sugarLevel === "ثقيل") sugar *= 1.3
 
-function nextStep(step){
+  if (teaLevel === "خفيف") tea *= 0.8
+  if (teaLevel === "ثقيل") tea *= 1.2
 
-  if(step === 2){
-    const teaType = document.getElementById("teaType").value;
-    if(!teaType){
-      alert("اختر نوع الشاهي أولاً");
-      return;
-    }
-  }
-
-  if(step === 3){
-    const water = parseFloat(document.getElementById("water").value);
-    if(!water || water <= 0){
-      alert("أدخل كمية ماء صحيحة");
-      return;
-    }
-  }
-
-  document.getElementById("step"+currentStep).classList.remove("active");
-  currentStep = step;
-  document.getElementById("step"+currentStep).classList.add("active");
+  document.getElementById("sugarResult").innerText = sugar.toFixed(1) + " جرام"
+  document.getElementById("teaResult").innerText = tea.toFixed(1) + " جرام"
 }
 
-function setStrength(mod,btn){
-  strengthModifier = mod;
+document.querySelectorAll("select").forEach(el => {
+  el.addEventListener("change", calculate)
+})
 
-  document.querySelectorAll(".strength button")
-    .forEach(b=>b.classList.remove("active-strength"));
-
-  btn.classList.add("active-strength");
-  calculate();
+function startTimer() {
+  goTo("brew")
+  seconds = 1320
+  running = true
+  updateTimer()
+  interval = setInterval(tick, 1000)
 }
 
-function calculate(){
-
-  const teaRatio = parseFloat(document.getElementById("teaType").value);
-  const water = parseFloat(document.getElementById("water").value);
-
-  if(!teaRatio || !water || water <= 0){
-    document.getElementById("result").innerText = "";
-    return;
+function tick() {
+  if (!running) return
+  if (seconds <= 0) {
+    clearInterval(interval)
+    goTo("done")
+    return
   }
-
-  let baseWeight = (water/1000)*teaRatio;
-  let finalWeight = baseWeight + strengthModifier;
-
-  if(finalWeight < 0) finalWeight = 0;
-
-  document.getElementById("result").innerText =
-    "النتيجة: "+finalWeight.toFixed(1)+" غرام";
+  seconds--
+  updateTimer()
 }
 
-document.getElementById("water")
-  .addEventListener("input",calculate);
-
-/* =========================
-   حفظ النتيجة
-========================= */
-
-async function saveResult(){
-
-  const { data } = await supabaseClient.auth.getSession();
-
-  if(!data.session){
-    alert("Session not ready ❌");
-    return false;
-  }
-
-  const user = data.session.user;
-
-  const teaRatio = parseFloat(document.getElementById("teaType").value);
-  const water = parseFloat(document.getElementById("water").value);
-
-  if(!teaRatio || !water || water <= 0){
-    alert("لا يمكن الحفظ بدون بيانات صحيحة");
-    return false;
-  }
-
-  let baseWeight = (water/1000)*teaRatio;
-  let finalWeight = baseWeight + strengthModifier;
-
-  if(finalWeight < 0) finalWeight = 0;
-
-  const { error } = await supabaseClient
-    .from("results")
-    .insert([
-      {
-        user_id: user.id,
-        brand_id: null,
-        water_liter: water / 1000,
-        tea_grams: Number(finalWeight),
-        sugar_grams: 0
-      }
-    ]);
-
-  if(error){
-    alert("Insert error ❌\n\n" + JSON.stringify(error, null, 2));
-    console.error("Insert error:", error);
-    return false;
-  }
-
-  console.log("Saved successfully");
-  return true;
+function updateTimer() {
+  const min = String(Math.floor(seconds / 60)).padStart(2, "0")
+  const sec = String(seconds % 60).padStart(2, "0")
+  document.getElementById("timer").innerText = min + ":" + sec
 }
 
-/* =========================
-   المؤقت
-========================= */
-
-async function startTimer(){
-
-  if(timerRunning) return;
-
-  const teaRatio = parseFloat(document.getElementById("teaType").value);
-  const water = parseFloat(document.getElementById("water").value);
-
-  if(!teaRatio){
-    alert("اختر نوع الشاهي أولاً");
-    return;
-  }
-
-  if(!water || water <= 0){
-    alert("احسب الكمية أولاً");
-    return;
-  }
-
-  const saved = await saveResult();
-  if(!saved) return;
-
-  timerRunning=true;
-
-  nextStep(4);
-
-  let total = 22*60;
-  let remaining = total;
-
-  const display = document.getElementById("timeDisplay");
-  const fill = document.getElementById("teaFill");
-
-  const interval = setInterval(()=>{
-
-    remaining--;
-
-    let m=Math.floor(remaining/60);
-    let s=remaining%60;
-
-    display.textContent=
-      String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
-
-    let progress=((total-remaining)/total)*100;
-    fill.style.height=progress+"%";
-
-    if(remaining<=0){
-      clearInterval(interval);
-      display.textContent="جاهز ☕";
-      if(navigator.vibrate) navigator.vibrate(500);
-      timerRunning=false;
-    }
-
-  },1000);
+function toggleTimer() {
+  running = !running
 }
 
-function scrollToCalc(){
-  document.getElementById("calculator")
-  .scrollIntoView({behavior:"smooth"});
+function finishEarly() {
+  clearInterval(interval)
+  goTo("done")
 }
+
+function toggleSound() {
+  const audio = document.getElementById("brewSound")
+  audio.paused ? audio.play() : audio.pause()
+}
+
+calculate()
