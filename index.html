@@ -1,108 +1,86 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>WAZNAH</title>
-<link rel="stylesheet" href="assets/css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>وزنة</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
 
-<nav class="navbar">
-  <div class="logo">وزنة</div>
-  <ul>
-    <li><a href="#hero">الرئيسية</a></li>
-    <li><a href="#features">المميزات</a></li>
-    <li><a href="#calculator">احسب</a></li>
-  </ul>
-</nav>
-
-<section id="hero" class="hero">
-  <div class="overlay"></div>
-  <div class="hero-content">
-    <h1>اتقن شاهيك بميزان احترافي</h1>
-    <p>دقة… انتظار… تجربة تستحق.</p>
-    <button class="primary-btn" onclick="scrollToCalc()">ابدأ التجربة ☕</button>
+<!-- ================= HOME ================= -->
+<section id="home" class="screen active">
+  <div class="center">
+    <div class="steam"></div>
+    <h1 class="logo">وزنة</h1>
+    <p class="subtitle">اضبطها على مزاجك</p>
+    <button class="glow-btn" onclick="goTo('ritual')">ابدأ الطقس</button>
   </div>
 </section>
 
-<section id="features" class="features">
-  <div class="card">⚖ نظام <span class="gold">وزنه</span> المرجعي</div>
-  <div class="card">🔥 حساب دقيق حسب الماء</div>
-  <div class="card">⏳ مؤقت خدرة 22 دقيقة</div>
-  <div class="card">📳 اهتزاز عند الجاهزية</div>
-</section>
+<!-- ================= RITUAL ================= -->
+<section id="ritual" class="screen">
+  <div class="card">
+    <h2>اختر مقاديرك</h2>
 
-<section id="calculator" class="calculator">
-<div class="calc-card">
+    <div class="group">
+      <label>كمية الماء (مل)</label>
+      <select id="water">
+        <option value="250">250</option>
+        <option value="350" selected>350</option>
+        <option value="500">500</option>
+        <option value="750">750</option>
+      </select>
+    </div>
 
-<div id="step1" class="step active">
-<h2>اختر نوع الشاهي</h2>
-<select id="teaType">
-<option value="14">الحوت</option>
-<option value="13">ربيع</option>
-<option value="12">مانيس</option>
-<option value="15">أبو جبل</option>
-<option value="13">سيلاني</option>
-</select>
-<button onclick="nextStep(2)">التالي</button>
-</div>
+    <div class="group">
+      <label>السكر</label>
+      <select id="sugar">
+        <option value="قليل">قليل</option>
+        <option value="وزنة" selected>وزنة</option>
+        <option value="ثقيل">ثقيل</option>
+      </select>
+      <span id="sugarResult"></span>
+    </div>
 
-<div id="step2" class="step">
-<h2>كمية الماء (مل)</h2>
-<input type="number" id="water" placeholder="مثال 1500" />
-<button onclick="nextStep(3)">التالي</button>
-</div>
+    <div class="group">
+      <label>الشاهي</label>
+      <select id="tea">
+        <option value="خفيف">خفيف</option>
+        <option value="وزنة" selected>وزنة</option>
+        <option value="ثقيل">ثقيل</option>
+      </select>
+      <span id="teaResult"></span>
+    </div>
 
-<div id="step3" class="step">
-<h2>اختر قوة الشاهي</h2>
-<div class="strength">
-<button onclick="setStrength(-2,this)">خفيف</button>
-<button onclick="setStrength(-1,this)">وسط</button>
-<button class="active-strength" onclick="setStrength(0,this)">⚖ وزنه</button>
-<button onclick="setStrength(2,this)">ثقيل</button>
-</div>
-
-<h2>اختر مستوى السكر</h2>
-<div class="sugar">
-<button onclick="setSugar(0,this)">بدون</button>
-<button onclick="setSugar(40,this)">خفيف</button>
-<button class="active-strength" onclick="setSugar(50,this)">⚖ وزنه</button>
-<button onclick="setSugar(60,this)">ثقيل</button>
-</div>
-
-<div class="result-card">
-  <h3>نتيجة التحضير</h3>
-  <div id="result">
-    ☕ الشاهي: 0 غرام<br>
-    🍬 السكر: 0 غرام
+    <button class="glow-btn full" onclick="startTimer()">ابدأ الخدرة (22 دقيقة)</button>
   </div>
-</div>
-
-<button class="primary-btn" onclick="startTimer()">ابدأ الخدرة</button>
-</div>
-
-<div id="step4" class="step timer-step">
-<h2>جارٍ الخدرة...</h2>
-
-<div class="cup-container">
-<div class="cup">
-<div class="tea-fill" id="teaFill"></div>
-</div>
-</div>
-
-<div id="timeDisplay">22:00</div>
-</div>
-
-</div>
 </section>
 
-<footer>
-WAZNAH © 2026 — دقة في كل كاسة.
-</footer>
+<!-- ================= BREW ================= -->
+<section id="brew" class="screen">
+  <div class="center">
+    <h2 id="timer">22:00</h2>
+    <div class="timer-buttons">
+      <button onclick="toggleTimer()">إيقاف/تشغيل</button>
+      <button class="danger" onclick="finishEarly()">إنهاء</button>
+    </div>
+  </div>
+</section>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- ================= DONE ================= -->
+<section id="done" class="screen">
+  <div class="center">
+    <h2>كيف النتيجة؟</h2>
+    <div class="feedback">
+      <button>خفيف شوي</button>
+      <button class="glow-btn small">مضبوط</button>
+      <button>ثقيل شوي</button>
+    </div>
+    <button onclick="goTo('home')">طقس جديد</button>
+  </div>
+</section>
+
 <script src="assets/js/app.js"></script>
 </body>
 </html>
