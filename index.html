@@ -4,14 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>وزنة</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
 <!-- ================= HOME ================= -->
 <section id="home" class="screen active">
+  <div class="overlay"></div>
+
   <div class="center">
-    <div class="steam"></div>
+    <div class="cup-wrapper">
+      <img src="assets/svg/cup.svg" class="cup">
+      <div class="steam s1"></div>
+      <div class="steam s2"></div>
+      <div class="steam s3"></div>
+    </div>
+
     <h1 class="logo">وزنة</h1>
     <p class="subtitle">اضبطها على مزاجك</p>
     <button class="glow-btn" onclick="goTo('ritual')">ابدأ الطقس</button>
@@ -61,8 +71,10 @@
 <section id="brew" class="screen">
   <div class="center">
     <h2 id="timer">22:00</h2>
-    <div class="timer-buttons">
-      <button onclick="toggleTimer()">إيقاف/تشغيل</button>
+
+    <div class="controls">
+      <button onclick="toggleSound()">تشغيل / إيقاف الصوت</button>
+      <button onclick="toggleTimer()">إيقاف / تشغيل المؤقت</button>
       <button class="danger" onclick="finishEarly()">إنهاء</button>
     </div>
   </div>
@@ -71,15 +83,14 @@
 <!-- ================= DONE ================= -->
 <section id="done" class="screen">
   <div class="center">
-    <h2>كيف النتيجة؟</h2>
-    <div class="feedback">
-      <button>خفيف شوي</button>
-      <button class="glow-btn small">مضبوط</button>
-      <button>ثقيل شوي</button>
-    </div>
+    <h2>اكتملت الخدرة ☕</h2>
     <button onclick="goTo('home')">طقس جديد</button>
   </div>
 </section>
+
+<audio id="brewSound" loop>
+  <source src="assets/sound/brew.mp3" type="audio/mpeg">
+</audio>
 
 <script src="assets/js/app.js"></script>
 </body>
